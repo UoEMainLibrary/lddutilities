@@ -32,60 +32,53 @@
                 </tr>
                 <tr>
                     <td><input type = "submit" name = "sendDetails" value = "send" />
+                </tr>
+                </table>
         </form>
     </div>
     <?php
-
+    ini_set('max_execution_time', 400);
     if (isset($_POST['sendDetails']))
     {
         $collection = $_POST['collection'];
         $part = 'part'.$_POST['part'];
         echo '<div class = "box">';
 
-        //ini_set('default_charset', 'utf-8');
-        #DIU Numbers
-        #Scott Renton, 02/08/2013
-        //include 'vars.php';
         $error = '';
 
-        $docbase = '/Users/srenton1/Projects';
-        $infile = $docbase.'/vernonDC/files/'.$collection.'fordspace'.$part.'.xml';
-        echo 'INFILE'.$infile;
+        $docbase = '/Users/srenton1/Projects/lddutilities/vernonDC/';
+        $infile = $docbase.'/files/'.$collection.'fordspace'.$part.'.xml';
 
-        //$infile = $docbase.'/vernonDC/files/test.xml';
         $dublincorefile = 'dublin_core.xml';
         $contentsfile = 'contents';
-        $logfile = $docbase.'/vernonDC/files/image_output.txt';
+        $logfile = $docbase.'/files/image_output.txt';
         $file_handle_in = fopen($infile, "r")or die("can't open infile");
-        $photodirectory =  $docbase.'/vernonDC/dspaceImages/'.$collection.'/';
-        $imagedirectory =  $docbase.'/vernonDC/dspaceImagesNonStandard/';
-        $update_file =  $docbase.'/vernonDC/files/'.$collection.'mapfile.txt';
+        //$photodirectory =  $docbase.'/dspaceImages/'.$collection.'/';
+        $photodirectory = '/Users/srenton1/Projects/IMAGES/';
+        //$photodirectory = '/Volumes/Vernon/Wincoll/IMAGES/';
+
+        $imagedirectory =  $docbase.'/dspaceImagesNonStandard/';
+
+        $update_file =  $docbase.'/files/'.$collection.'mapfile.txt';
         echo $update_file.'<br>';
 
         $file_handle_log_out = fopen($logfile, "a+")or die("can't open this outfile");
-        $directory = $docbase.'/vernonDC/files/'.$collection.'dspaceNew/';
+        $directory = $docbase.'/files/'.$collection.'dspaceNew/';
         echo $directory.'<br>';
         mkdir($directory);
-        $update_directory = $docbase.'/vernonDC/files/'.$collection.'dspaceExisting/';
+        $update_directory = $docbase.'/files/'.$collection.'dspaceExisting/';
         echo $update_directory.'<br>';
         mkdir($directory);
-        $mappingfile = $docbase.'/vernonDC/files/mapping.txt';
+        $mappingfile = $docbase.'/files/mapping.txt';
         $file_handle_map_in = fopen($mappingfile, "r") or die ("can't open mapping file");
-
-        $okimagesfile =$docbase.'/vernonDC/files/'.$collection.'okimages.txt';
-
+        $okimagesfile =$docbase.'/files/'.$collection.'okimages.txt';
         $folder_name = 0;
         $delimiter=',';
-
         $mapping = array();
         $header = null;
-
         $failed_images = 0;
         $processed_images = 0;
-
         $xml=simplexml_load_file($infile);
-        echo 'INFILE'.$infile;
-        ///print_r('XML'.$xml);
 
         $i=0;
         while (!feof($file_handle_map_in))
@@ -102,10 +95,8 @@
 
         foreach($xml->children() as $object)
         {
-            echo 'how we doing?';
             $update = false;
             $subfolder = '';
-
 
             foreach($object-> children() as $item)
             {
@@ -114,16 +105,9 @@
                 if ($tag != 'accession_no' and $tag != 'av' and $tag != 'av_primary_image')
                 {
                     $item = html_entity_decode($item,ENT_QUOTES, 'UTF-8');
-                   // echo 'ITEM decoded'.$item;
-
-                    //$item = htmlspecialchars($item, ENT_QUOTES, 'UTF-8');
-                    //$item = htmlentities($item,ENT_QUOTES, 'UTF-8');
-                    //echo 'ITEM entitied'.$item;
                     $item = str_replace('|', '', $item);
                     $item = str_replace('@I{', '', $item);
                     $item = str_replace('@T{', '', $item);
-
-                    //$item=str_replace('"','&#34;', $item);
                     $item=str_replace('#','&#35;', $item);
                     $item=str_replace('&','&#38;', $item);
                     $item=str_replace('\'','&#39;', $item);
@@ -236,18 +220,9 @@
                     $item = str_replace('ü', '&#252;', $item);
                     $item = str_replace('ý', '&#253;', $item);
                     $item = str_replace('þ', '&#254;', $item);
-                    //$item=str_replace('!','&#33;', $item);
-
                     $item=str_replace('$','&#36;', $item);
                     $item=str_replace('%','&#37;', $item);
-
-                    //$item=str_replace('(','&#40;', $item);
-                    //$item=str_replace(')','&#41;', $item);
-                    //$item=str_replace('*','&#42;', $item);
                     $item=str_replace('+','&#43;', $item);
-                   // $item=str_replace('-','&#45;', $item);
-                    //$item=str_replace('/','&#47;', $item);
-                    //$item=str_replace(':','&#58;', $item);
                     $item=str_replace('<','&#60;', $item);
                     $item=str_replace('=','&#61;', $item);
                     $item=str_replace('>','&#62;', $item);
@@ -282,7 +257,6 @@
                     $item = str_replace('♭', '&#9837;', $item);
                     $item = str_replace('♯', '&#9839;', $item);
                     $item = str_replace('♮', '&#9838;', $item);
-                    //$item = str_replace('&amp;', '&', $item);
                 }
 
                 if ($tag == 'accession_no')
@@ -293,7 +267,6 @@
                     {
                         $strlen = strlen($item);
                         $item = substr($item, 2,($strlen - 2));
-
                     }
                 }
 
@@ -341,7 +314,7 @@
                            }
                        }
 
-                     echo 'FOLDER'.$foldername;
+                       echo 'FOLDER'.$foldername;
                        if ($update == true)
                        {
                             $subfolder = $update_directory.$foldername;
@@ -367,23 +340,22 @@
                        if ($tag == 'av')
                        {
                            echo 'AV'.$item;
-
                            $imagenamepos = strpos($item,'\00');
                            $imagenamepos++;
                            $photofolderpos = strpos($item, '; 00');
                            $photofolderpos = $photofolderpos+ 2;
-                           $photofolder = substr($item,$photofolderpos, 16);
+                           $photofolder = substr($item,$photofolderpos, 15)."/";
 
                            $okphoto = false;
                            $foundit = '';
-
                            $photono = substr($item, $imagenamepos,17);
+                           echo 'PHOTONO'.$photono.'<br>';
+
                            $type = substr($photono,7, 1);
 
-
-                           if (strpos($photono,'-') == false)
-                           {
-                               $photono = substr($photono, 0,12);
+                           if (strpos($photono,'-') == false) {
+                               $photono = substr($photono, 0, 12);
+                               echo 'PHOTONONOW'.$photono.'<br>';
                            }
 
                            if (strpos($photono, '.web') != false)
@@ -392,71 +364,70 @@
                                echo 'WEBM'.$photono.'<br>';
                            }
 
-
                            if ($collection == 'art')
                            {
+
+                               $pfile = $photodirectory.$photofolder;
                                $photopath=$photofolder.$photono;
-                               echo 'PHOTOPATH'.$photopath.'<br>';
                                $file_handle_images_in = fopen($okimagesfile, "r") or die ("can't open ok image file");
                                while (!feof($file_handle_images_in))
                                {
                                    $foundit = false;
                                    $line = fgets($file_handle_images_in);
+                                   $line = str_replace("\\","/",$line);
                                    $foundit = strpos($line,$photopath);
-                                  //echo 'FOOND'.$foundit.'<br>';
                                    if ($foundit !== false)
                                    {
-
                                        $okphoto = true;
-                                       if (is_dir($photodirectory))
+                                       if (is_dir($pfile))
                                        {
-                                           if ($dh = opendir($photodirectory))
+                                           if ($dh = opendir($pfile))
                                            {
                                                while (($file = readdir($dh)) !== false)
                                                {
 
                                                    if ($file == $photono)
                                                    {
-                                                       $filepath = $photodirectory.$file;
-
+                                                       $filepath = $pfile.$photono;
                                                        $copypath = $subfolder.'/'.$file;
-                                                       echo 'PATHS'.$file.$filepath.$copypath;
                                                        if (!copy($filepath, $copypath))
                                                        {
                                                            echo "failed to copy $filepath...\n";
                                                            $failed_images++;
+
                                                        }
                                                        else
                                                        {
-                                                           echo 'Are we in here? Why not?';
+                                                           echo 'Processed Image'.$filepath;
                                                            fwrite($file_handle_contents_out, $file."\n");
-                                                          $processed_images++;
+                                                           $processed_images++;
                                                        }
-
                                                    }
                                                }
                                            }
                                            closedir($dh);
                                        }
+                                       else{
+                                           echo 'I cannot get into '.$pfile;
+                                       }
                                    }
-
-                                }
+                               }
                            }
                            else
                            {
-                               if (is_dir($photodirectory))
+                               $pfile = $photodirectory.$photofolder;
+
+                               if (is_dir($pfile))
                                {
-                                   if ($dh = opendir($photodirectory))
+                                   if ($dh = opendir($pfile))
                                    {
                                        while (($file = readdir($dh)) !== false)
                                        {
 
                                            if ($file == $photono)
                                            {
-                                               $filepath = $photodirectory.$file;
-
+                                               $filepath = $pfile.$photono;
                                                $copypath = $subfolder.'/'.$file;
-                                               echo 'PATHS'.$file.$filepath.$copypath;
                                                if (!copy($filepath, $copypath))
                                                {
                                                    echo "failed to copy $filepath...\n";
@@ -465,25 +436,25 @@
                                                }
                                                else
                                                {
-                                                   echo 'Are we in here? Why not?';
+                                                   echo 'Processed Image'.$filepath;
                                                    fwrite($file_handle_contents_out, $file."\n");
                                                    $processed_images++;
                                                }
-
                                            }
                                        }
                                    }
                                    closedir($dh);
-                                  }
+                               }
+                               else{
+                                   echo 'I cannot get into '.$pfile;
+                               }
                            }
-                           }
-
+                       }
 
                        if ($tag == 'image')
                        {
                            $photolen = strlen($item);
                            echo 'IMAGE COMING IN'.$item.$photolen.'<br>';
-
                            if (substr($item,0,4) == 'EUCM')
                            {
                                $stoppos = strpos($item, ".");
@@ -493,7 +464,6 @@
                                $item = substr($item, 0, $stoppos2 -1);
                                echo $item.'<br>';
                            }
-
 
                            switch ($photolen)
                            {
@@ -518,7 +488,6 @@
                                {
                                    while (($file = readdir($dh)) !== false)
                                    {
-                                       //echo 'COMP'.$file.$item.'<br>';
                                        if (strpos($file, $item) !== false)
                                        {
                                            echo 'FILE'.$file.'<br>';
@@ -533,17 +502,12 @@
                                            else
                                            {
                                                fwrite($file_handle_contents_out, $file."\n");
-
                                            }
                                        }
                                    }
-
                                    closedir($dh);
-
                                }
-
                            }
-
                            fwrite($file_handle_dc_out, '</dublin_core>');
                            fclose($file_handle_dc_out);
                            fclose($file_handle_contents_out);
@@ -552,22 +516,18 @@
 
                        if ($tag != 'av' and $tag != 'image')
                        {
-
                            $outline = '';
-
                            if ($mappingrow[3] == 'noqual')
                            {
                                if ($tag !== 'object_type')
                                {
                                    echo 'setting non-typetag'.$tag.$collection.'<br>';
                                     $outline = '<'.$mdtype.'value element = "'.$mdfield.'" qualifier = "">'.$item."</dcvalue>\n";
-
                                }
                                else if ( $collection !== 'mimed')
                                {
                                    echo 'setting non-mimedcoll'.$tag.$collection.'<br>';
                                    $outline = '<'.$mdtype.'value element = "'.$mdfield.'" qualifier = "">'.$item."</dcvalue>\n";
-
                                }
                            }
                            else
@@ -581,37 +541,26 @@
                                }
                                else
                                {
-
                                  echo 'setting outline qualified<br>';
                                  $outline = '<'.$mdtype.'value element = "'.$mdfield.'" qualifier = "'.$mappingrow[3].'">'.$item."</dcvalue>\n";
                                }
                            }
-                           echo 'OUT'.$outline.'<br>';
-
                            fwrite($file_handle_dc_out,$outline);
                        }
-
-
                    }
-
-
                 }
-
-
             }
 
             fwrite($file_handle_dc_out, '</dublin_core>');
             fclose($file_handle_dc_out);
             fclose($file_handle_contents_out);
             $folder_name++;
-
         }
         echo 'FAILED IMAGES'.$failed_images;
         echo 'PROCESSED IMAGES'.$processed_images;
         fclose($file_handle_in);
         fclose($file_handle_log_out);
     }
-
 ?>
 
 

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>LDD Utilities Menu</title>
+
+    <!-- Bootstrap -->
+    <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="https://cdn.rawgit.com/mejackreed/Leaflet-IIIF/master/leaflet-iiif.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+
+    <![endif]-->
+</head>
+<body>
+<!--<h1>OpenSeadragon starring Joseph Black</h1>-->
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!--<script src="assets/bootstrap/js/bootstrap.min.js"></script>-->
+
+<!--<script src="assets/openseadragon/openseadragon.min.js"></script>
+<script type="text/javascript">
+    var viewer = OpenSeadragon({
+        id: "openseadragon1",
+        prefixUrl: "assets/openseadragon/images/",
+        tileSources: "imagetest/0016005/GeneratedImages/dzc_output.xml"
+    });
+</script>-->
+
+
+<!--LUNA example-->
+<h1>OpenSeadragon starring LUNA</h1>
+<div id="openseadragon1" style="width: 800px; height: 800px;"></div>
+<script src="assets/openseadragon/openseadragon.min.js"></script>
+<script type="text/javascript">
+
+    OpenSeadragon({
+        id:                 "openseadragon1",
+        prefixUrl:          "assets/openseadragon/images/",
+        preserveViewport:   true,
+        visibilityRatio:    1,
+        minZoomLevel:       1,
+        defaultZoomLevel:   1,
+        sequenceMode:       true,
+        tileSources:        "http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/info.json"
+    });
+</script>
+
+
+
+<h1> Leaflet attempt</h1>
+<div id="map"></div>
+<script type="text/javascript">
+    var map = L.map('map', {
+        center: [0, 0],
+        crs: L.CRS.Simple,
+        zoom: 0,
+    }).addLayer(L.tileLayer.iiif('http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/info.json'));
+</script>
+</body>
+</html>
+
+
+<!--working LUNA tile source
+
+tileSources:   [{/*
+"@context": "http://iiif.io/api/image/2/context.json",
+// "@id": "http://libimages.princeton.edu/loris2/pudl0001%2F4609321%2Fs42%2F00000004.jp2",
+"@id": "http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914",
+"height": 10000,
+"width": 7000,
+"profile": [ "http://iiif.io/api/image/2/level2.json",    {
+"formats" : [ "gif", "pdf" ],
+} ],
+"protocol": "http://iiif.io/api/image",
+"tiles": [ {
+"scaleFactors": [ 1, 2, 4, 8, 16, 32 ],
+"width": 1024}]*/]-->

@@ -25,11 +25,11 @@
 //print_r($data);
 $i = 0;
 
-for ($row = 1; $row < 10000; $row++) {
+for ($row = 0; $row < 50000; $row++) {
     echo "<p><b>Row number $row</b></p>";
     echo "<ul>";
     //for ($col = 0; $col < 7; $col++) {
-    $image_id = substr($data[$row]['mageName'],0,7);
+    $image_id = substr($data[$row]['ImageName'],0,7);
     $tagusecount = $data[$row]['TagUseCnt'];
     $tag=$data[$row]['Tag'];
     $tag = str_replace ( "'", "&#39;", $tag);
@@ -84,12 +84,25 @@ for ($row = 1; $row < 10000; $row++) {
 
     if ($image_id == "" )
     {
-        $row = 10000;
+        $row = 50000;
     }
     else
     {
-        $insert_sql = "insert into orders.CROWD (image_id, value_text, uun, status, game ) values ('$image_id', '$tag', '$uun', '$status' , '$game');";
-        $insert_result = mysql_query($insert_sql) or die("A MySQL error has occurred.<br />Your Query: " . $insert_sql . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
+        $crowd_id = '';
+        $select_sql = "select id from orders.CROWD where image_id = '$image_id' and value_text = '$tag';";
+        $select_result = mysql_query($select_sql) or die("A MySQL error has occurred.<br />Your Query: " . $select_sql . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
+        $count = mysql_num_rows($select_result);
+        echo 'Count'.$count."<br>";
+
+        if ($count == 0)
+        {
+            $insert_sql = "insert into orders.CROWD (image_id, value_text, uun, status, game ) values ('$image_id', '$tag', '$uun', '$status' , '$game');";
+            $insert_result = mysql_query($insert_sql) or die("A MySQL error has occurred.<br />Your Query: " . $insert_sql . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
+            echo 'Inserting:'.$image_id.' '.$tag."<br>";
+        }
+        else{
+            echo 'Duplicate tag:'.$image_id.' '.$tag."<br>";
+        }
     }
 }
 

@@ -1,0 +1,9 @@
+author:dc:contributor:author:
+title:dc:title:noqual:
+date:dc:date:issued:
+publisher:dc:publisher:noqual:
+subject:dc:subject:noqual:
+type:dc:type:noqual:
+qualname:dc:type:qualificationname:
+quallevel:dc:type:qualificationlevel:
+abstract:dc:description:abstract:

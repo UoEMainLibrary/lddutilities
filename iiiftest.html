@@ -1,0 +1,81 @@
+
+<html>
+<head>
+<title>Digilib example: embedded image</title>
+
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+        <!-- Bootstrap -->
+        <link href="assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
+
+        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+<script type="text/javascript" src="jquery/jquery.js"></script>
+<script type="text/javascript" src="jquery/jquery.digilib.js"></script>
+<script type="text/javascript" src="jquery/jquery.cookie.js"></script>
+<script type="text/javascript" src="jquery/jquery.digilib.geometry.js"></script>
+<script type="text/javascript" src="jquery/jquery.digilib.buttons.js"></script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+                  var $divs = $('.mydiv');
+                  var opts = {
+                  interactionMode : 'embedded',
+                  digilibBaseUrl : '/digilib'
+                  };
+                  $divs.digilib(opts);
+                  
+                  // $('div.digilib').each(function(){
+                  //    console.log($(this).data('digilib').settings);
+                  //    });
+                  });
+
+</script>
+
+<link rel="stylesheet" type="text/css" href="jquery/jquery.digilib.css" />
+
+</head>
+<body>
+
+<h1>&nbsp;LUNA IIIF Testing page</h1>
+<br><br>
+
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is an <b>image</b>:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/full/0/default.jpg" target = "_blank">&nbsp;URL: http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/full/0/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the image <b>scaled</b> to an acceptable width (500px):<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/200,/0/default.jpg" target = "_blank">&nbsp;URL: http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/500,/0/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is a region of the image, scaled to appear 500px wide using <b>co-ordinates</b>. They start 300px in horizontally, 50px in vertically, and reaching to 350px across and 200px down:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/300,50,350,200/500,/0/default.jpg" target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/500,/0/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the same region <b>without</b> setting the size of the rendering:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/0/default.jpg"  target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/full/0/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the same region rotated <b>180 degrees</b>:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/180/default.jpg"  target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/full/180/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the same region rotated <b>236 degrees</b>:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/236/default.jpg"  target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/full/236/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the same region rotated 180 degrees AND <b>MIRRORED</b>:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/!180/default.jpg"  target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/full/!180/default.jpg</a></h4>
+<br><br>
+<h4>&nbsp;<i class="fa fa-picture-o"></i>&nbsp;Here is the same region <b>grey</b>:<br><br>
+<a href="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/full/0/grey.jpg"  target = "_blank">&nbsp;URL: http://test.collectionsmedia.is.ed.ac.uk:8080/digilib/servlet/Scaler/IIIF/0070025/300,50,350,200/full/0/grey.jpg</a></h4>
+<br><br>
+
+
+<iframe id="widgetPreview" frameBorder="0"  width="700px"  height="350px"  border="0px" style="border:0px solid white"  src="http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/workspace/handleMediaPlayer?lunaMediaId=UoEgal~5~5~150474~162914&embedded=true&cic=UoEgal%7E5%7E5&widgetFormat=javascript&widgetType=workspace&controls=1&nsip=1" ></iframe>
+</body>
+</html>

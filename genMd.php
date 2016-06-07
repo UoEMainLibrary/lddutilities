@@ -20,140 +20,52 @@
     </div>
     <?php
 
-    //STEP 1 Connect To Database
-    include 'vars.php';
+    include 'config/vars.php';
     $error = '';
     $link = mysql_connect($dbserver, $username, $password);
     @mysql_select_db($database) or die( "Unable to select database");
 
 
-
-    $select_a_sql = "select r.id, r.image_id, r.type, r.value_text, c.name as collection from orders.CROWD r, orders.COLLECTION c, orders.IMAGE i where r.image_id = i.image_id and i.collection = c.id and r.status = 'A' order by r.image_id;";
+    $select_sql = "select r.id, r.image_id, r.value_text, i.collection, r.game from orders.CROWD r, orders.COLLECTION c, orders.IMAGE i where r.image_id = i.image_id and i.collection = c.id and r.status in ('A', 'C') and r.game  in ('D', 'A', 'R') order by r.image_id;";
     $select_result = mysql_query($select_sql) or die( "A MySQL error has occurred.<br />Your Query: " . $select_sql . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
     $select_count = mysql_numrows($select_result);
-    $outfile = "files/metadata.csv";
-    $file_handle_out = fopen($outfile, "w")or die("can't open infile");
-    $researchfile = "files/sourcedResearch.csv";
-    $file_handle_res = fopen($researchfile, "w")or die("can't open infile");
-    fwrite($file_handle_out,"workrecordid,field,value\n");
-    fwrite($file_handle_res,"workrecordid,field,value\n");
+    $outfile = "input/tagfile.txt";
+    $file_handle_out = fopen($outfile, "w")or die("can't open outfile");
     $p = 0;
     $collarray =array();
     $prev_id = 0;
 
     while ($p < $select_count)
     {
-
-
-        $type = mysql_result($select_result, $p, 'type');
         $value_text = mysql_result($select_result, $p, 'value_text');
+        $game = mysql_result($select_result, $p, 'game');
         $image_id = mysql_result($select_result, $p, 'image_id');
         $collection = mysql_result($select_result, $p, 'collection');
         $id = mysql_result($select_result, $p, 'id');
 
-        switch ($type) {
-            case 'subject_object':
-                $subject_type = 'Subject Object';
-                break;
-            case 'subject_person':
-                $subject_type = 'Subject Person';
-                break;
-            case 'subject_event':
-                $subject_type = 'Subject Event';
-                break;
-            case 'subject_category':
-                $subject_type = 'Subject Class';
-                break;
-            case 'subject_place':
-                $subject_type = 'Subject Place';
-                break;
-            case 'subject_date':
-                $subject_type = 'Subject Date';
-                break;
-            case 'creator':
-                $subject_type = 'Creator';
-                break;
-            case 'transcription':
-                $subject_type = 'Transcription';
-                break;
-            case 'translation':
-                $subject_type = 'Translation';
-                break;
-            case 'date_research':
-                $subject_type = 'Date';
-                break;
-            case 'production':
-                $subject_type = 'Production';
-                break;
-        }
 
-        $subjpos = strpos($subject_type, 'ubject');
-
-        //echo 'SUBJPOS'.$subjpos;
-        if ($image_id != $prev_id and $keyword != '')
-        {
-            $keywordstring = $prev_id.','.'Keyword'.',"'.$keyword."\"\n";
-            echo 'keybefore'.$keywordstring;
-            $keywordstring = str_replace(', "' ,'"', $keywordstring);
-            echo 'keyafter'.$keywordstring;
-            fwrite($file_handle_out, $keywordstring);
-            $keyword = '';
-        }
-
-        if ($subjpos !== false)
-        {
-            fwrite($file_handle_out, $image_id.', '.$subject_type. ', "'.$value_text."\"\n");
-            $keyword .= $value_text.', ';
-
-        }
-        else
-        {
-            fwrite($file_handle_res, $image_id.', '.$subject_type. ', "'.$value_text."\"\n");
-        }
-        echo 'IM'.$image_id.'PR'.$prev_id.'KY'.$keyword."\n";
+        $image_id =(substr($image_id, 0,7));
+        $value_text = (ucname($value_text));
+        fwrite($file_handle_out, $image_id.';'.$value_text. ';'.$collection.";\n");
 
 
-
-        $sql = "UPDATE orders.CROWD set status = 'C'  where id= '".$id."';";
+        $sql = "UPDATE orders.CROWD set status = 'L'  where id= '".$id."';";
         $result=mysql_query($sql) or die( "A MySQL error has occurred.<br />Your Query: " . $sql . "<br /> Error: (" . mysql_errno() . ") " . mysql_error());
 
-        $value = $collection;
-
-        if (!in_array($value, $collarray))
-        {
-            $collarray[] = $value;
-        }
-
-
-        $prev_id = $image_id;
         $p++;
 
     }
 
-    if ($keyword != '')
-    {
-        $keywordstring = $prev_id.','.'Keyword'.',"'.$keyword."\"\n";
-        $keywordstring = str_replace(', "' ,'"', $keywordstring);
-        fwrite($file_handle_out, $keywordstring);
-        $keyword = '';
+    function ucname($string) {
+        $string =ucwords(strtolower($string));
+
+        foreach (array('-', '\'') as $delimiter) {
+            if (strpos($string, $delimiter)!==false) {
+                $string =implode($delimiter, array_map('ucfirst', explode($delimiter, $string)));
+            }
+        }
+        return $string;
     }
-
-    echo '<div class = "die"><p>METADATA IN FILE</p></div>';
-    //construct and send e-mail to let the user know they're approved
-
-    foreach ($collarray as $item )
-    {
-        $concatenated_message .= $item."\n";
-    }
-
-
-    $whoto = "scott.renton@ed.ac.uk";
-    $email = "scott.renton@ed.ac.uk";
-    $subject = "You have new metadata for these collections";
-
-    mail( $email, $subject,$concatenated_message, "From: $whoto" );
-
-
     ?>
 
 

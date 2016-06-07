@@ -35,6 +35,9 @@ MsgBox "Howdy DIU!"
     Dim ardarray(1000) As String
     Dim hilarray(1000) As String
     Dim geoarray(1000) As String
+    Dim anaarray(1000) As String
+    Dim maparray(1000) As String
+    Dim walarray(1000) As String
 
     'Initialise file objects
     Dim fwmm As Object
@@ -69,6 +72,12 @@ MsgBox "Howdy DIU!"
     Set fhil = CreateObject("ADODB.Stream")
     Dim fgeo As Object
     Set fgeo = CreateObject("ADODB.Stream")
+    Dim fana As Object
+    Set fana = CreateObject("ADODB.Stream")
+    Dim fmap As Object
+    Set fmap = CreateObject("ADODB.Stream")
+    Dim fwal As Object
+    Set fwal = CreateObject("ADODB.Stream")
 
     'Need a second object so we can get rid of the BOM character
     Dim fwmmb As Object
@@ -103,6 +112,12 @@ MsgBox "Howdy DIU!"
     Set fhilb = CreateObject("ADODB.Stream")
     Dim fgeob As Object
     Set fgeob = CreateObject("ADODB.Stream")
+    Dim fanab As Object
+    Set fanab = CreateObject("ADODB.Stream")
+    Dim fmapb As Object
+    Set fmapb = CreateObject("ADODB.Stream")
+    Dim fwalb As Object
+    Set fwalb = CreateObject("ADODB.Stream")
 
     'Set file object properties
     fwmm.Type = 2
@@ -153,6 +168,15 @@ MsgBox "Howdy DIU!"
     fgeo.Type = 2
     fgeo.Charset = "utf-8"
     fgeo.Open
+    fana.Type = 2
+    fana.Charset = "utf-8"
+    fana.Open
+    fmap.Type = 2
+    fmap.Charset = "utf-8"
+    fmap.Open
+    fwal.Type = 2
+    fwal.Charset = "utf-8"
+    fwal.Open
 
     'Set binary file object properties and open
     fwmmb.Type = 1
@@ -203,6 +227,15 @@ MsgBox "Howdy DIU!"
     fgeob.Type = 1
     fgeob.Mode = 3
     fgeob.Open
+    fanab.Type = 1
+    fanab.Mode = 3
+    fanab.Open
+    fmapb.Type = 1
+    fmapb.Mode = 3
+    fmapb.Open
+    fwalb.Type = 1
+    fwalb.Mode = 3
+    fwalb.Open
 
     'Declare final file names
     wmmcsv = "T:\diu\Worksheets\csv\WMM.csv"
@@ -221,18 +254,24 @@ MsgBox "Howdy DIU!"
     roscsv = "T:\diu\Worksheets\csv\ROS.csv"
     ecrcsv = "T:\diu\Worksheets\csv\ECR.csv"
     geocsv = "T:\diu\Worksheets\csv\GEO.csv"
+    anacsv = "T:\diu\Worksheets\csv\ANA.csv"
+    mapcsv = "T:\diu\Worksheets\csv\MAP.csv"
+    walcsv = "T:\diu\Worksheets\csv\WAL.csv"
+
     summfile = "T:\diu\Worksheets\csv\summary.txt"
 
-    'Set up headers
-    firstheader = "Work Record ID,ID Number,ID Date,Cataloguer,Shelfmark,Holding Institution,Old ID,Catalogue Number,Title,Alternate Title,Title Notes,Translated Title,Untranslated Title,Variant Title,Imprint,Subset,Subset Index,Sequence,Creator#1,Creator#2,Creator#3,Creator Name#1,Creator Name#2,Creator Name#3,Creator Dates#1,Creator Dates#2,Creator Dates#3,Creator Nationality#1,Creator Nationality#2,Creator Nationality#3,Creator Role#1,Creator Role#2,Creator Role#3,Creator Active Dates#1,Creator Active Dates#2,Creator Active Dates#3,Summary Creator#1,Summary Creator#2,Summary Creator#3,Production Notes#1,Production Notes#2,Production Notes#3,Associate Creator,Associate Creator Name,Associate Creator Dates,Associate Creator Nationality,Associate Creator Role,Date,Early Date,Late Date,Date Info,Description,Classification,Work Type,Work Type Notes,Measurement,Measurement Type,Measurement Notes,Measurement Unit,Material,Material Notes,Technique,"
-    secondheader = "Secondary Technique,Location#1,Location#2,Department,Gallery,Location Info,Production Place#1,Production Place#2,Production Place#3,Production Place#4,Production Place#5,Repository,Source,Repository Notes,Style or Period,Style Secondary Period Term,Culture,Subject#1,Subject#2,Subject#3,Subject Person#1,Subject Person#2,Subject Person#3,Subject Person#4,Subject Person#5,Subject Person#6,Subject Person#7,Subject Person#8,Subject Person#9,Subject Person#10,Subject Person#11,Subject Person#12,Subject Person#13,Subject Person#14,Subject Person#15,Subject Person#16,Subject Person#17,Subject Person#18,Subject Person#19,Subject Person#20,Subject Person#21,Subject Person#22,Subject Person#23,Subject Person#24,Subject Person#25,Subject Person#26,Subject Person#27,Subject Person#28,Subject Person#29,Subject Person#30,Subject Person#31,Subject Person#32,Subject Person#33,Subject Person#34,Subject Person#35,"
-    thirdheader = "Subject Role,Subject Place#1,Subject Place#2,Subject Place#3,Subject Place#4,Subject Place#5,Subject Place#6,Subject Event,Subject Object,Subject Category#1,Subject Category#2,Subject Category#3,Subject Category#4,Subject Category#5,Subject Date,Subject Period,Related Object,Relation Type,Reference,Related Work Title,Related Work Page No,Related Work Creator,Related Work Article,Related Work Notes,Related Work Publish Date,Related Work Desc,Rights Statement,Rights Details,Inscription,Inscription Notes,Provenance Notes,Keyword,Catalogue Entry,Media Group,"
-    fourthheader = "Repro Record ID,Repro Link ID,Repro File Type,Repro File Size (bytes),Repro Capture Device Type,Repro Resolution (dpi),Repro Notes,Repro Title,Repro Display Measurement (pixels),Repro Measurement Unit,Repro Creator Name#1,Repro Creator Name#2,Repro Creator Role Description#1,Repro Creator Role Description#2,Repro Repository,Repro ID Number,Repro Old ID Number,Repro Related Object,Repro Relation Type,Repro Relation Notes,Repro Description,Repro Rights Statement,Repro Capture Date,Repro Publication Status"
+
+ 'Set up headers
+    firstheader = "Work Record ID,Licence,ID Number,ID Date,Cataloguer,Shelfmark,Holding Institution,Old ID,Catalogue Number,Title,Alternate Title,Title Notes,Translated Title,Untranslated Title,Variant Title,Imprint,Subset,Subset Index,Sequence,Creator#1,Creator#2,Creator#3,Creator#4,Creator#5,Creator Name#1,Creator Name#2,Creator Name#3,Creator Name#4,Creator Name#5,Creator Dates#1,Creator Dates#2,Creator Dates#3,Creator Dates#4,Creator Dates#5,Creator Nationality#1,Creator Nationality#2,Creator Nationality#3,Creator Nationality#4,Creator Nationality#5,Creator Role#1,Creator Role#2,Creator Role#3,Creator Role#4,Creator Role#5,Creator Active Dates#1,Creator Active Dates#2,Creator Active Dates#3,Creator Active Dates#4,Creator Active Dates#5,Summary Creator#1,Summary Creator#2,Summary Creator#3,Summary Creator#4,Summary Creator#5,Production Notes#1,Production Notes#2,Production Notes#3,Production Notes#4,Production Notes#5,Associate Creator,Associate Creator Name,Associate Creator Dates,"
+    secondheader = "Associate Creator Nationality,Associate Creator Role,Date,Early Date,Late Date,Date Info,Description,Classification,Work Type,Work Type Notes,Measurement,Measurement Type,Measurement Notes,Measurement Unit,Material,Material Notes,Technique,"
+    thirdheader = "Secondary Technique,Location#1,Location#2,Department,Gallery,Location Info,Production Place#1,Production Place#2,Production Place#3,Production Place#4,Production Place#5,Repository,Source,Repository Notes,Style or Period,Style Secondary Period Term,Culture,Subject#1,Subject#2,Subject#3,Subject Person#1,Subject Person#2,Subject Person#3,Subject Person#4,Subject Person#5,Subject Person#6,Subject Person#7,Subject Person#8,Subject Person#9,Subject Person#10,Subject Person#11,Subject Person#12,Subject Person#13,Subject Person#14,Subject Person#15,Subject Person#16,Subject Person#17,Subject Person#18,Subject Person#19,Subject Person#20,Subject Person#21,Subject Person#22,Subject Person#23,Subject Person#24,Subject Person#25,Subject Person#26,Subject Person#27,Subject Person#28,Subject Person#29,Subject Person#30,Subject Person#31,Subject Person#32,Subject Person#33,Subject Person#34,Subject Person#35,"
+    fourthheader = "Subject Role,Subject Place#1,Subject Place#2,Subject Place#3,Subject Place#4,Subject Place#5,Subject Place#6,Subject Event,Subject Object,Subject Category#1,Subject Category#2,Subject Category#3,Subject Category#4,Subject Category#5,Subject Date,Subject Period,Related Object,Relation Type,Reference,Related Work Title,Related Work Page No,Related Work Creator,Related Work Article,Related Work Notes,Related Work Publish Date,Related Work Desc,Rights Statement,Rights Details,Inscription,Inscription Notes,Provenance Notes,Keyword,Catalogue Entry,Media Group,Tag,"
+    fifthheader = "Repro Record ID,Repro Link ID,Repro File Type,Repro File Size (bytes),Repro Capture Device Type,Repro Resolution (dpi),Repro Notes,Repro Title,Repro Display Measurement (pixels),Repro Measurement Unit,Repro Creator Name#1,Repro Creator Name#2,Repro Creator Role Description#1,Repro Creator Role Description#2,Repro Repository,Repro ID Number,Repro Old ID Number,Repro Related Object,Repro Relation Type,Repro Relation Notes,Repro Description,Repro Rights Statement,Repro Capture Date,Repro Publication Status"
 
     'And make the header line for csv a concatenation of above
-    Header = firstheader & secondheader & thirdheader & fourthheader
+    Header = firstheader & secondheader & thirdheader & fourthheader & fifthheader
 
-    'initialise counts
+  'initialise counts
     i = 5
     wmmcount = 0
     uoecount = 0
@@ -250,6 +289,9 @@ MsgBox "Howdy DIU!"
     ardcount = 0
     hilcount = 0
     geocount = 0
+    anacount = 0
+    mapcount = 0
+    walcount = 0
 
     'File objects open- comment out
     'Open wmmcsv For Output Lock Write As #1
@@ -289,10 +331,11 @@ MsgBox "Howdy DIU!"
         summaryCreatorString = ""
         creatorNameString = ""
 
+
         'If ready to process act, otherwise bypass
         If processed = "X" Then
             coll = Cells(i, 22)
-
+            badcoll = "N"
             'Get collection tla
             Select Case coll
                 Case "Western Medieval Manuscripts"
@@ -301,11 +344,10 @@ MsgBox "Howdy DIU!"
                 Case "University of Edinburgh"
                     uoecoll = coll
                     shortcoll = "uoe"
-
                 Case "CRC Gallimaufry"
                     galcoll = coll
                     shortcoll = "gal"
-                Case "Roslin"
+                Case "Roslin Institute"
                     shortcoll = "ros"
                     roscoll = coll
                 Case "Laing"
@@ -344,415 +386,477 @@ MsgBox "Howdy DIU!"
                 Case "Geology and Geologists"
                     geocoll = coll
                     shortcoll = "geo"
+                Case "Anatomy"
+                    anacoll = coll
+                    shortcoll = "ana"
+                Case "Maps"
+                    mapcoll = coll
+                    shortcoll = "map"
+                Case "Walter Scott Image Collection"
+                    walcoll = coll
+                    shortcoll = "wal"
+               Case Else
+                    badcoll = "Y"
             End Select
 
-            'Get copyright text
-            Select Case Cells(i, 10)
-                Case "UoE-Y"
-                    copyrightstring = "Copyright The University of Edinburgh. Free use."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "UoE-N"
-                    copyrightstring = "Copyright The University of Edinburgh. Not for Public Access."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "Orphan"
-                    copyrightstring = "Copyright unknown, orphan work."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "UoE&A-Y"
-                    copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has been granted for specific use by the University of Edinburgh."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "UoE&A-N"
-                    copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "DataP"
-                    copyrightstring = "Copyright in the original may be University of Edinburgh or rest elsewhere. Data Protection restrictions."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "Loan"
-                    copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for  use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "OC"
-                    copyrightstring = "Out of Copyright."
-                    reprocopystring = "Copyright The University of Edinburgh."
-                Case "LHSA"
-                    copyrightstring = "Copyright and Data Protection Restrictions. Not for Public Access."
-                    reprocopystring = "Copyright and Data Protection Restrictions. Not for Public Access."
-                Case Else
-                    copyrightstring = "No copyright information available."
-                    reprocopystring = "No copyright information available."
-            End Select
+            If badcoll = "N" Then
+                'Get copyright text
+                Select Case Cells(i, 10)
+                    Case "UoE-Y"
+                        copyrightstring = "Copyright The University of Edinburgh. Free use."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = "<a href = " & Chr(34) & Chr(34) & "https://creativecommons.org/licenses/by/3.0/" & Chr(34) & Chr(34) & " target=" & Chr(34) & Chr(34) & "_blank" & Chr(34) & Chr(34) & "><img src = " & Chr(34) & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/by.jpg" & Chr(34) & Chr(34) & "/></a>"
+                    Case "UoE-N"
+                        copyrightstring = "Copyright The University of Edinburgh. Not for Public Access."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = ""
+                    Case "Orphan"
+                        copyrightstring = "Copyright unknown, orphan work."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = "<a href = " & Chr(34) & Chr(34) & "https://creativecommons.org/licenses/by/3.0/" & Chr(34) & Chr(34) & " target=" & Chr(34) & Chr(34) & "_blank" & Chr(34) & Chr(34) & "><img src = " & Chr(34) & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/by.jpg" & Chr(34) & Chr(34) & "/></a>"
+                    Case "UoE&A-Y"
+                        copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has been granted for specific use by the University of Edinburgh."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = "<a href = " & Chr(34) & Chr(34) & "https://creativecommons.org/licenses/by-nc-nd/3.0/" & Chr(34) & Chr(34) & " target=" & Chr(34) & Chr(34) & "_blank" & Chr(34) & Chr(34) & "><img src = " & Chr(34) & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/byncnd.jpg" & Chr(34) & Chr(34) & "/></a>"
+                    Case "UoE&A-N"
+                        copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = ""
+                    Case "DataP"
+                        copyrightstring = "Copyright in the original may be University of Edinburgh or rest elsewhere. Data Protection restrictions."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = ""
+                    Case "Loan"
+                        copyrightstring = "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for  use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = ""
+                    Case "OC"
+                        copyrightstring = "Out of Copyright."
+                        reprocopystring = "Copyright The University of Edinburgh."
+                        licencestring = "<a href = " & Chr(34) & Chr(34) & "https://creativecommons.org/licenses/by/3.0/" & Chr(34) & Chr(34) & " target=" & Chr(34) & Chr(34) & "_blank" & Chr(34) & Chr(34) & "><img src = " & Chr(34) & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/by.jpg" & Chr(34) & Chr(34) & "/></a>"
+                    Case "LHSA"
+                        copyrightstring = "Copyright and Data Protection Restrictions. Not for Public Access."
+                        reprocopystring = "Copyright and Data Protection Restrictions. Not for Public Access."
+                        licencestring = ""
+                    Case Else
+                        copyrightstring = "No copyright information available."
+                        reprocopystring = "No copyright information available."
+                        licencestring = ""
+                End Select
 
-            'Process repro fields
-            reproRecordId = Left(Cells(i, 8), 7) & "c.tif"
-            reproTitle = Chr(34) & Cells(i, 13) & ", " & Cells(i, 17) & Chr(34)
-            reproLinkId = Left(Cells(i, 8), 7) & "c"
+                'Process repro fields
+                reproRecordId = Left(Cells(i, 8), 7) & "c.tif"
+                reproTitle = Chr(34) & Cells(i, 13) & ", " & Cells(i, 17) & Chr(34)
+                reproLinkId = Left(Cells(i, 8), 7) & "c"
 
-            'Get pub status full text
-            If Cells(i, 11) = "Y" Then
-                publicStatus = "Full Public Access"
-            Else
-                publicStatus = "No access"
-            End If
-
-            'Process repeating category
-            Category = Cells(i, 19)
-
-            If InStr(Category, ";") = 0 Then
-                If Category = "N/A" Or Category = "Unknown" Or Category = "-" Then
-                    Category = ""
-                End If
-                subjectCatString = Chr(34) & Category & Chr(34)
-                j = 0
-            Else
-                categoryArray() = Split(Category, ";")
-                For j = LBound(categoryArray()) To UBound(categoryArray())
-                    If categoryArray(j) = "" Then
-                        subjectCatString = subjectCatString & ","
-                    Else
-                        subjectCatString = subjectCatString & Chr(34) & Trim(categoryArray(j)) & Chr(34) & ","
-                    End If
-                Next j
-            End If
-
-            For o = j To 4
-                subjectCatString = subjectCatString & ","
-            Next o
-
-            'Process repeating subject persons
-            Person = Cells(i, 23)
-            If InStr(Person, ";") = 0 Then
-                If Person = "N/A" Or Person = "Unknown" Or Person = "-" Then
-                    Person = ""
-                End If
-                subjectPersonString = Chr(34) & Person & Chr(34)
-                k = 0
-            Else
-                personArray() = Split(Person, ";")
-
-                For k = LBound(personArray()) To UBound(personArray())
-                    If personArray(k) = "" Then
-                        subjectPersonString = subjectPersonString & ","
-                    Else
-                        subjectPersonString = subjectPersonString & Chr(34) & Trim(personArray(k)) & Chr(34) & ","
-                    End If
-                Next k
-            End If
-
-            For m = k To 34
-                subjectPersonString = subjectPersonString & ","
-            Next m
-
-            'Process repeating subject places
-            Place = Cells(i, 20)
-            If InStr(Place, ";") = 0 Then
-                If Place = "N/A" Or Place = "Unknown" Or Place = "-" Then
-                    Place = ""
-                End If
-                subjectPlaceString = Chr(34) & Place & Chr(34)
-                r = 0
-            Else
-                placeArray() = Split(Place, ";")
-                For r = LBound(placeArray()) To UBound(placeArray())
-                    If placeArray(r) = "" Then
-                        subjectPlaceString = subjectPlaceString & ","
-                    Else
-                        subjectPlaceString = subjectPlaceString & Chr(34) & Trim(placeArray(r)) & Chr(34) & ","
-                    End If
-                Next r
-            End If
-
-            For s = r To 5
-                subjectPlaceString = subjectPlaceString & ","
-            Next s
-
-            'Process repeating prod places
-            prodPlace = Cells(i, 15)
-            If InStr(prodPlace, ";") = 0 Then
-                If prodPlace = "N/A" Or prodPlace = "Unknown" Or prodPlace = "-" Then
-                    prodPlace = ""
-                End If
-                prodPlaceString = Chr(34) & prodPlace & Chr(34)
-                v = 0
-            Else
-                prodPlaceArray() = Split(prodPlace, ";")
-                For v = LBound(prodPlaceArray()) To UBound(prodPlaceArray())
-                    If prodPlaceArray(v) = "" Then
-                        prodPlaceString = prodPlaceString & ","
-                    Else
-                        prodPlaceString = prodPlaceString & Chr(34) & Trim(prodPlaceArray(v)) & Chr(34) & ","
-                    End If
-                Next v
-            End If
-
-            For w = v To 4
-                prodPlaceString = prodPlaceString & ","
-            Next w
-
-            'Generate summary creator in correct format
-            creatorName = Cells(i, 16)
-            If InStr(creatorName, ";") = 0 Then
-                'If creatorName = "N/A" Or creatorName = "Unknown" Or creatorName = "-" Then
-                '    creatorName = ""
-                'End If
-                If InStr(creatorName, ",") = 0 Then
-                    summaryCreator = creatorName
+                'Get pub status full text
+                If Cells(i, 11) = "Y" Then
+                    publicStatus = "Full Public Access"
                 Else
-                    creatorArray() = Split(creatorName, ",")
-                    summaryCreator = Trim(creatorArray(1) & " " & creatorArray(0))
+                    publicStatus = "No access"
                 End If
 
-                creatorNameString = Chr(34) & creatorName & Chr(34)
-                summaryCreatorString = Chr(34) & summaryCreator & Chr(34)
-                y = 0
-            Else
-                creatorNameArray() = Split(creatorName, ";")
-                For y = LBound(creatorNameArray()) To UBound(creatorNameArray())
-                    If creatorNameArray(y) = "" Then
-                        creatorNameString = creatorNameString & ","
-                    Else
-                        creatorNameString = creatorNameString & Chr(34) & Trim(creatorNameArray(y)) & Chr(34) & ","
-                    End If
+                'Process repeating category
+                Category = Cells(i, 19)
 
-                    If InStr(creatorNameArray(y), ",") = 0 Then
-                        summaryCreator = creatorNameArray(y)
+                If InStr(Category, ";") = 0 Then
+                    If Category = "N/A" Or Category = "Unknown" Or Category = "-" Then
+                        Category = ""
+                    End If
+                    subjectCatString = Chr(34) & Category & Chr(34)
+                    j = 0
+                Else
+                    categoryArray() = Split(Category, ";")
+                    For j = LBound(categoryArray()) To UBound(categoryArray())
+                        If categoryArray(j) = "" Then
+                            subjectCatString = subjectCatString & ","
+                        Else
+                            subjectCatString = subjectCatString & Chr(34) & Trim(categoryArray(j)) & Chr(34) & ","
+                        End If
+                    Next j
+                End If
+
+                For o = j To 4
+                    subjectCatString = subjectCatString & ","
+                Next o
+
+                'Process repeating subject persons
+                Person = Cells(i, 23)
+                If InStr(Person, ";") = 0 Then
+                    If Person = "N/A" Or Person = "Unknown" Or Person = "-" Then
+                        Person = ""
+                    End If
+                    subjectPersonString = Chr(34) & Person & Chr(34)
+                    k = 0
+                Else
+                    personArray() = Split(Person, ";")
+
+                    For k = LBound(personArray()) To UBound(personArray())
+                        If personArray(k) = "" Then
+                            subjectPersonString = subjectPersonString & ","
+                        Else
+                            subjectPersonString = subjectPersonString & Chr(34) & Trim(personArray(k)) & Chr(34) & ","
+                        End If
+                    Next k
+                End If
+
+                For m = k To 34
+                    subjectPersonString = subjectPersonString & ","
+                Next m
+
+                'Process repeating subject places
+                Place = Cells(i, 20)
+                If InStr(Place, ";") = 0 Then
+                    If Place = "N/A" Or Place = "Unknown" Or Place = "-" Then
+                        Place = ""
+                    End If
+                    subjectPlaceString = Chr(34) & Place & Chr(34)
+                    r = 0
+                Else
+                    placeArray() = Split(Place, ";")
+                    For r = LBound(placeArray()) To UBound(placeArray())
+                        If placeArray(r) = "" Then
+                            subjectPlaceString = subjectPlaceString & ","
+                        Else
+                            subjectPlaceString = subjectPlaceString & Chr(34) & Trim(placeArray(r)) & Chr(34) & ","
+                        End If
+                    Next r
+                End If
+
+                For s = r To 5
+                    subjectPlaceString = subjectPlaceString & ","
+                Next s
+
+                'Process repeating prod places
+                prodPlace = Cells(i, 15)
+                If InStr(prodPlace, ";") = 0 Then
+                    If prodPlace = "N/A" Or prodPlace = "Unknown" Or prodPlace = "-" Then
+                        prodPlace = ""
+                    End If
+                    prodPlaceString = Chr(34) & prodPlace & Chr(34)
+                    v = 0
+                Else
+                    prodPlaceArray() = Split(prodPlace, ";")
+                    For v = LBound(prodPlaceArray()) To UBound(prodPlaceArray())
+                        If prodPlaceArray(v) = "" Then
+                            prodPlaceString = prodPlaceString & ","
+                        Else
+                            prodPlaceString = prodPlaceString & Chr(34) & Trim(prodPlaceArray(v)) & Chr(34) & ","
+                        End If
+                    Next v
+                End If
+
+                For w = v To 4
+                    prodPlaceString = prodPlaceString & ","
+                Next w
+
+                'Generate summary creator in correct format
+                creatorName = Cells(i, 16)
+                If InStr(creatorName, ";") = 0 Then
+                    'If creatorName = "N/A" Or creatorName = "Unknown" Or creatorName = "-" Then
+                    '    creatorName = ""
+                    'End If
+                    If InStr(creatorName, ",") = 0 Then
+                        summaryCreator = creatorName
                     Else
-                        creatorArray() = Split(creatorNameArray(y), ",")
+                        creatorArray() = Split(creatorName, ",")
                         summaryCreator = Trim(creatorArray(1) & " " & creatorArray(0))
-                        summaryCreatorString = summaryCreatorString & Chr(34) & summaryCreator & Chr(34) & ","
                     End If
-                Next y
-            End If
 
-            For Z = y To 2
-                creatorNameString = creatorNameString & ","
-                summaryCreatorString = summaryCreatorString & ","
-            Next Z
+                    creatorNameString = Chr(34) & creatorName & Chr(34)
+                    summaryCreatorString = Chr(34) & summaryCreator & Chr(34)
+                    y = 0
+                Else
+                    creatorNameArray() = Split(creatorName, ";")
+                    For y = LBound(creatorNameArray()) To UBound(creatorNameArray())
+                        If creatorNameArray(y) = "" Then
+                            creatorNameString = creatorNameString & ","
+                        Else
+                            creatorNameString = creatorNameString & Chr(34) & Trim(creatorNameArray(y)) & Chr(34) & ","
+                        End If
 
-            'Process out nulls
-
-            If Cells(i, 25) = "N/A" Or Cells(i, 25) = "Unknown" Or Cells(i, 25) = "-" Then
-                subjectEventString = ""
-            Else
-                subjectEventString = Cells(i, 25)
-            End If
-
-            If Cells(i, 26) = "N/A" Or Cells(i, 26) = "Unknown" Or Cells(i, 26) = "-" Then
-                reproNotes = ""
-            Else
-                reproNotes = Cells(i, 26)
-            End If
-
-            If Cells(i, 21) = "N/A" Or Cells(i, 21) = "Unknown" Or Cells(i, 21) = "-" Then
-                descriptionString = ""
-            Else
-                descriptionString = Cells(i, 21)
-            End If
-
-            If Cells(i, 14) = "N/A" Or Cells(i, 14) = "Unknown" Or Cells(i, 14) = "-" Then
-                dateString = ""
-            Else
-                dateString = Cells(i, 14)
-            End If
-
-            'Assign data to data lines
-dataLine1 = Left(Cells(i, 8), 7) & ",,,," & Chr(34) & Cells(i, 12) & Chr(34) & "," & Chr(34) & "University of Edinburgh" & Chr(34) & ",,," & Chr(34) & Cells(i, 13) & Chr(34) & ",,,,,,," & Chr(34) & Cells(i, 13) & Chr(34) & "," & Chr(34) & Cells(i, 17) & Chr(34) & "," & Cells(i, 18) & "," & creatorNameString & creatorNameString & ",,,,,,,,,,,," & summaryCreatorString & ",,,,,,,," & dateString & ",,,," & Chr(34) & descriptionString & Chr(34) & ",,,,,,,,,,,,,,,,," & prodPlaceString & Chr(34) & Cells(i, 22) & Chr(34) & ",,,,,,,,," & subjectPersonString & "," & subjectPlaceString & Chr(34) & subjectEventString & Chr(34) & ",," & subjectCatString & ",,,,," & Chr(34) & Cells(i, 13) & Chr(34) & "," & Chr(34) & Cells(i, 17) & Chr(34) & ",,,,,," & Chr(34) & copyrightstring & Chr(34) & ",,,,,,,,"
-dataLine2 = reproRecordId & "," & reproLinkId & ",Cropped TIFF,,,," & Chr(34) & reproNotes & Chr(34) & "," & reproTitle & ",,,Digital Imaging Unit,,Creator,," & Chr(34) & Cells(i, 22) & Chr(34) & "," & reproLinkId & ",,,,,," & Chr(34) & reprocopystring & Chr(34) & ",," & publicStatus
-dataLine = dataLine1 & dataLine2
-
-            'Write to file objects
-            If shortcoll = "wmm" Then
-                If wmmcount = 0 Then
-                    'Print #1, Header
-                    fwmm.WriteText Header & Chr(10)
+                        If InStr(creatorNameArray(y), ",") = 0 Then
+                            summaryCreator = creatorNameArray(y)
+                        Else
+                            creatorArray() = Split(creatorNameArray(y), ",")
+                            summaryCreator = Trim(creatorArray(1) & " " & creatorArray(0))
+                            summaryCreatorString = summaryCreatorString & Chr(34) & summaryCreator & Chr(34) & ","
+                        End If
+                    Next y
                 End If
-                'Print #1, dataLine
-                fwmm.WriteText dataLine & Chr(10)
-                wmmarray(wmmcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                wmmcount = wmmcount + 1
-            End If
 
-            If shortcoll = "uoe" Then
-                If uoecount = 0 Then
-                    'Print #1, Header
-                    fuoe.WriteText Header & Chr(10)
+                For Z = y To 4
+                    creatorNameString = creatorNameString & ","
+                    summaryCreatorString = summaryCreatorString & ","
+                Next Z
+
+                'Process out nulls
+
+                If Cells(i, 25) = "N/A" Or Cells(i, 25) = "Unknown" Or Cells(i, 25) = "-" Then
+                    subjectEventString = ""
+                Else
+                    subjectEventString = Cells(i, 25)
                 End If
-                'Print #1, dataLine
-                fuoe.WriteText dataLine & Chr(10)
-                uoearray(uoecount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                uoecount = uoecount + 1
-            End If
 
-            If shortcoll = "gal" Then
-                If galcount = 0 Then
-                    'Print #1, Header
-                    fgal.WriteText Header & Chr(10)
+                If Cells(i, 26) = "N/A" Or Cells(i, 26) = "Unknown" Or Cells(i, 26) = "-" Then
+                    reproNotes = ""
+                Else
+                    reproNotes = Cells(i, 26)
                 End If
-                'Print #1, dataLine
-                fgal.WriteText dataLine & Chr(10)
-                galarray(galcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                galcount = galcount + 1
-            End If
 
-            If shortcoll = "lai" Then
-                If laicount = 0 Then
-                    'Print #1, Header
-                    flai.WriteText Header & Chr(10)
+                If Cells(i, 21) = "N/A" Or Cells(i, 21) = "Unknown" Or Cells(i, 21) = "-" Then
+                    descriptionString = ""
+                Else
+                    descriptionString = Cells(i, 21)
                 End If
-                'Print #1, dataLine
-                flai.WriteText dataLine & Chr(10)
-                laiarray(laicount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                laicount = laicount + 1
-            End If
 
-            If shortcoll = "ecr" Then
-                If ecrcount = 0 Then
-                    'Print #1, Header
-                    fecr.WriteText Header & Chr(10)
+                If Cells(i, 14) = "N/A" Or Cells(i, 14) = "Unknown" Or Cells(i, 14) = "-" Then
+                    dateString = ""
+                Else
+                    dateString = Cells(i, 14)
                 End If
-                'Print #1, dataLine
-                fecr.WriteText dataLine & Chr(10)
-                ecrarray(ecrcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                ecrcount = ecrcount + 1
 
-            End If
-
-            If shortcoll = "inc" Then
-                If inccount = 0 Then
-                    'Print #1, Header
-                    finc.WriteText Header & Chr(10)
+                If Cells(i, 8) = "" Then
+                    workstring = Left(Cells(i, 9), 7)
+                Else
+                    workstring = Left(Cells(i, 8), 7)
                 End If
-                'Print #1, dataLine
-                finc.WriteText dataLine & Chr(10)
-                incarray(inccount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                inccount = inccount + 1
 
-            End If
+                'Assign data to data lines
+    dataLine1 = Chr(34) & Left(Cells(i, 8), 7) & Chr(34) & "," & licencestring & ",,,," & Chr(34) & Cells(i, 12) & Chr(34) & "," & Chr(34) & "University of Edinburgh" & Chr(34) & ",,," & Chr(34) & Cells(i, 13) & Chr(34) & ",,,,,,," & Chr(34) & Cells(i, 13) & Chr(34) & "," & Chr(34) & Cells(i, 17) & Chr(34) & "," & Cells(i, 18) & "," & creatorNameString & creatorNameString & ",,,,,,,,,,,,,,,,,,,," & summaryCreatorString & ",,,,,,,,,," & Chr(34) & dateString & Chr(34) & ",,,," & Chr(34) & descriptionString & Chr(34) & ",,,,,,,,,,,,,,,,," & prodPlaceString & Chr(34) & Cells(i, 22) & Chr(34) & ",,,,,,,,," & subjectPersonString & "," & subjectPlaceString & Chr(34) & subjectEventString & Chr(34) & ",," & subjectCatString & ",,,,," & Chr(34) & Cells(i, 13) & Chr(34) & "," & Chr(34) & Cells(i, 17) & Chr(34) & ",,,,,," & Chr(34) & copyrightstring & Chr(34) & ",,,,,," & Chr(34) & Cells(i, 24) & Chr(34) & ",,,"
+    dataLine2 = reproRecordId & "," & reproLinkId & ",Cropped TIFF,,,," & Chr(34) & reproNotes & Chr(34) & "," & reproTitle & ",,,Digital Imaging Unit,,Creator,," & Chr(34) & Cells(i, 22) & Chr(34) & "," & reproLinkId & ",,,,,," & Chr(34) & reprocopystring & Chr(34) & ",," & publicStatus
+    dataLine = dataLine1 & dataLine2
 
-            If shortcoll = "sss" Then
-                If ssscount = 0 Then
-                    'Print #1, Header
-                    fsss.WriteText Header & Chr(10)
+                'Write to file objects
+                If shortcoll = "wmm" Then
+                    If wmmcount = 0 Then
+                        'Print #1, Header
+                        fwmm.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fwmm.WriteText dataLine & Chr(10)
+                    wmmarray(wmmcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    wmmcount = wmmcount + 1
                 End If
-                'Print #1, dataLine
-                fsss.WriteText dataLine & Chr(10)
-                sssarray(ssscount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                ssscount = ssscount + 1
 
-            End If
-
-            If shortcoll = "ros" Then
-                If roscount = 0 Then
-                    'Print #1, Header
-                    fros.WriteText Header & Chr(10)
+                If shortcoll = "uoe" Then
+                    If uoecount = 0 Then
+                        'Print #1, Header
+                        fuoe.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fuoe.WriteText dataLine & Chr(10)
+                    uoearray(uoecount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    uoecount = uoecount + 1
                 End If
-                'Print #1, dataLine
-                fros.WriteText dataLine & Chr(10)
-                rosarray(roscount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                roscount = roscount + 1
 
-            End If
-
-            If shortcoll = "sal" Then
-                If salcount = 0 Then
-                    'Print #1, Header
-                    fsal.WriteText Header & Chr(10)
+                If shortcoll = "gal" Then
+                    If galcount = 0 Then
+                        'Print #1, Header
+                        fgal.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fgal.WriteText dataLine & Chr(10)
+                    galarray(galcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    galcount = galcount + 1
                 End If
-                'Print #1, dataLine
-                fsal.WriteText dataLine & Chr(10)
-                salarray(salcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                salcount = salcount + 1
 
-            End If
-
-            If shortcoll = "hil" Then
-                If hilcount = 0 Then
-                    'Print #1, Header
-                    fhil.WriteText Header & Chr(10)
+                If shortcoll = "lai" Then
+                    If laicount = 0 Then
+                        'Print #1, Header
+                        flai.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    flai.WriteText dataLine & Chr(10)
+                    laiarray(laicount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    laicount = laicount + 1
                 End If
-                'Print #1, dataLine
-                fhil.WriteText dataLine & Chr(10)
-                hilarray(hilcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                hilcount = hilcount + 1
 
-            End If
+                If shortcoll = "ecr" Then
+                    If ecrcount = 0 Then
+                        'Print #1, Header
+                        fecr.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fecr.WriteText dataLine & Chr(10)
+                    ecrarray(ecrcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    ecrcount = ecrcount + 1
 
-            If shortcoll = "ard" Then
-                If ardcount = 0 Then
-                    'Print #1, Header
-                    fard.WriteText Header & Chr(10)
                 End If
-                'Print #1, dataLine
-                fard.WriteText dataLine & Chr(10)
-                ardarray(ardcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                ardcount = ardcount + 1
 
-            End If
+                If shortcoll = "inc" Then
+                    If inccount = 0 Then
+                        'Print #1, Header
+                        finc.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    finc.WriteText dataLine & Chr(10)
+                    incarray(inccount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    inccount = inccount + 1
 
-            If shortcoll = "sha" Then
-                If shacount = 0 Then
-                    'Print #1, Header
-                    fsha.WriteText Header & Chr(10)
                 End If
-                'Print #1, dataLine
-                fsha.WriteText dataLine & Chr(10)
-                shaarray(shacount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                shacount = shacount + 1
-            End If
 
-            If shortcoll = "new" Then
-                If newcount = 0 Then
-                    'Print #1, Header
-                    fnew.WriteText Header & Chr(10)
+                If shortcoll = "sss" Then
+                    If ssscount = 0 Then
+                        'Print #1, Header
+                        fsss.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fsss.WriteText dataLine & Chr(10)
+                    sssarray(ssscount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    ssscount = ssscount + 1
+
                 End If
-                'Print #1, dataLine
-                fnew.WriteText dataLine & Chr(10)
-                newarray(newcount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                newcount = newcount + 1
-            End If
 
-            If shortcoll = "ori" Then
-                If oricount = 0 Then
-                    'Print #1, Header
-                    fori.WriteText Header & Chr(10)
+                If shortcoll = "ros" Then
+                    If roscount = 0 Then
+                        'Print #1, Header
+                        fros.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fros.WriteText dataLine & Chr(10)
+                    rosarray(roscount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    roscount = roscount + 1
+
                 End If
-                'Print #1, dataLine
-                fori.WriteText dataLine & Chr(10)
-                oriarray(oricount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                oricount = oricount + 1
-            End If
 
-            If shortcoll = "tho" Then
-                If thocount = 0 Then
-                    'Print #1, Header
-                    ftho.WriteText Header & Chr(10)
+                If shortcoll = "sal" Then
+                    If salcount = 0 Then
+                        'Print #1, Header
+                        fsal.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fsal.WriteText dataLine & Chr(10)
+                    salarray(salcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    salcount = salcount + 1
+
                 End If
-                'Print #1, dataLine
-                ftho.WriteText dataLine & Chr(10)
-                thoarray(thocount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                thocount = thocount + 1
-            End If
 
-            If shortcoll = "geo" Then
-                If geocount = 0 Then
-                    'Print #1, Header
-                    fgeo.WriteText Header & Chr(10)
+                If shortcoll = "hil" Then
+                    If hilcount = 0 Then
+                        'Print #1, Header
+                        fhil.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fhil.WriteText dataLine & Chr(10)
+                    hilarray(hilcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    hilcount = hilcount + 1
+
                 End If
-                'Print #1, dataLine
-                fgeo.WriteText dataLine & Chr(10)
-                geoarray(geocount) = Cells(i, 8) & " ; " & Cells(i, 11)
-                geocount = geocount + 1
-            End If
 
-             Cells(i, 39) = "V"
-           End If
+                If shortcoll = "ard" Then
+                    If ardcount = 0 Then
+                        'Print #1, Header
+                        fard.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fard.WriteText dataLine & Chr(10)
+                    ardarray(ardcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    ardcount = ardcount + 1
+
+                End If
+
+                If shortcoll = "sha" Then
+                    If shacount = 0 Then
+                        'Print #1, Header
+                        fsha.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fsha.WriteText dataLine & Chr(10)
+                    shaarray(shacount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    shacount = shacount + 1
+                End If
+
+                If shortcoll = "new" Then
+                    If newcount = 0 Then
+                        'Print #1, Header
+                        fnew.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fnew.WriteText dataLine & Chr(10)
+                    newarray(newcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    newcount = newcount + 1
+                End If
+
+                If shortcoll = "ori" Then
+                    If oricount = 0 Then
+                        'Print #1, Header
+                        fori.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fori.WriteText dataLine & Chr(10)
+                    oriarray(oricount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    oricount = oricount + 1
+                End If
+
+                If shortcoll = "tho" Then
+                    If thocount = 0 Then
+                        'Print #1, Header
+                        ftho.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    ftho.WriteText dataLine & Chr(10)
+                    thoarray(thocount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    thocount = thocount + 1
+                End If
+
+                If shortcoll = "geo" Then
+                    If geocount = 0 Then
+                        'Print #1, Header
+                        fgeo.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fgeo.WriteText dataLine & Chr(10)
+                    geoarray(geocount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    geocount = geocount + 1
+                End If
+
+                If shortcoll = "ana" Then
+                    If anacount = 0 Then
+                        'Print #1, Header
+                        fana.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fana.WriteText dataLine & Chr(10)
+                    anaarray(anacount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    anacount = anacount + 1
+                End If
+
+                If shortcoll = "map" Then
+                    If mapcount = 0 Then
+                        'Print #1, Header
+                        fmap.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fmap.WriteText dataLine & Chr(10)
+                    maparray(mapcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    mapcount = mapcount + 1
+                End If
+
+                If shortcoll = "wal" Then
+                    If walcount = 0 Then
+                        'Print #1, Header
+                        fwal.WriteText Header & Chr(10)
+                    End If
+                    'Print #1, dataLine
+                    fwal.WriteText dataLine & Chr(10)
+                    walarray(mapcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                    walcount = mapcount + 1
+                End If
+
+                 Cells(i, 39) = "V"
+            End If
+         End If
 
 
          Next
          'Start after the BOM chars, copy to bin and then copy to csv
 
          If wmmcount > 0 Then
-            fwwm.Position = 3
-            fwwm.CopyTo fwmmb
-            fwwm.Flush
-            fwwm.Close
+            fwmm.Position = 3
+            fwmm.CopyTo fwmmb
+            fwmm.Flush
+            fwmm.Close
             fwmmb.SaveToFile wmmcsv, 2
          Else
             fwmm.Close
@@ -924,6 +1028,39 @@ dataLine = dataLine1 & dataLine2
             fsalb.Close
          End If
 
+         If anacount > 0 Then
+            fana.Position = 3
+            fana.CopyTo fanab
+            fana.Flush
+            fana.Close
+            fanab.SaveToFile anacsv, 2
+         Else
+            fana.Close
+            fanab.Close
+         End If
+
+         If mapcount > 0 Then
+            fmap.Position = 3
+            fmap.CopyTo fmapb
+            fmap.Flush
+            fmap.Close
+            fmapb.SaveToFile mapcsv, 2
+         Else
+            fmap.Close
+            fmapb.Close
+         End If
+
+         If walcount > 0 Then
+            fwal.Position = 3
+            fwal.CopyTo fwalb
+            fwal.Flush
+            fwal.Close
+            fwalb.SaveToFile walcsv, 2
+         Else
+            fwal.Close
+            fwalb.Close
+         End If
+
          i = 0
 
          If wmmcount > 0 Then
@@ -1084,6 +1221,35 @@ dataLine = dataLine1 & dataLine2
                 Print #99, geoarray(i)
             Next
         End If
+
+        i = 0
+
+        If anacount > 0 Then
+            Print #99, anacoll
+            Print #99, "===================="
+            For i = 0 To anacount
+                Print #99, anaarray(i)
+            Next
+        End If
+
+        i = 0
+
+        If mapcount > 0 Then
+            Print #99, mapcoll
+            Print #99, "===================="
+            For i = 0 To mapcount
+                Print #99, maparray(i)
+            Next
+        End If
+
+        If walcount > 0 Then
+            Print #99, walcoll
+            Print #99, "===================="
+            For i = 0 To walcount
+                Print #99, walarray(i)
+            Next
+        End If
+
         'Close #1
         'Close #2
         'Close #3
@@ -1152,7 +1318,7 @@ MsgBox "Hello!"
 
     execdir = "T:\diu\Worksheets\"
     MsgBox execdir
-    For i = 5 To 2000
+    For i = 5 To lRows
         If Cells(i, 31) = "R" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageNo = Left(Cells(i, 8), 7)
@@ -1195,18 +1361,18 @@ MsgBox "Hello!"
             Print #1, "cd /D T: > " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>&1"
             Print #1, "cd " & Chr(34) & "T:\diu\Worksheets\exiv2" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
             Print #1, "echo " & Chr(34) & "directory is: " & Chr(34) & "%cd% >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Iptc.Application2.Headline String " & imageNo & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Iptc.Application2.Copyright String " & copyrightstring & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.dc.creator XmpSeq " & diu & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Iptc.Application2.Caption String " & descString & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Iptc.Application2.ObjectName String " & titleString & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity XmpText " & city & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode XmpText " & postcode & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr XmpText  " & extrAdr & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry XmpText " & country & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork XmpText " & tel & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork XmpText " & Email & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M" & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork XmpText " & URL & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Headline String " & imageNo & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Copyright String " & copyrightstring & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.dc.creator XmpSeq " & diu & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Caption String " & descString & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.ObjectName String " & titleString & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity XmpText " & city & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode XmpText " & postcode & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr XmpText  " & extrAdr & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry XmpText " & country & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork XmpText " & tel & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork XmpText " & Email & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork XmpText " & URL & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
 
             Close #1
 
@@ -1232,7 +1398,7 @@ MsgBox "Hello!"
     lRows = oWorksheet.Rows.Count
 
     execdir = "T:\diu\Worksheets\"
-    For i = 5 To 2000
+    For i = 5 To lRows
         If Cells(i, 31) = "E" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageNo = Left(Cells(i, 8), 7)
@@ -1253,7 +1419,4 @@ MsgBox "Hello!"
 
 
 End Sub
-
-
-
 

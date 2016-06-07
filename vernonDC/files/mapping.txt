@@ -4,7 +4,7 @@ name:dc:title:noqual:
 user_sym_47:dc:relation:ispartof:
 user_sym_48:dc:relation:ispartof:
 user_sym_49:dc:relation:ispartof:
-prod_pri_person_name:dc:contributor:author:
+user_sym_33:dc:contributor:author:
 prod_pri_person:dc:contributor:authorfull:
 material:dc:format:noqual:
 measure_desc:dc:format:extent:
@@ -111,9 +111,12 @@ destination:dc:coverage:spatial:
 general_flag:dc:format:harvest:
 prod_pri_person_bio_display:dc:contributor:authorbio:
 user_text_2:dc:description:piccolo:
-user_text_5:dc:description:level2:
+user_text_1:dc:description:level1:
 user_sym_55:dc:contributor:assocbio:
 prod_det_person_name:dc:contributor:assoc:
 prod_det_person:dc:contributor:assocfull:
 user_sym_56:dc:type:desc:
 user_sym_57:dc:type:history:
+user_sym_58:dc:type:specific:
+user_auth_mv5:dc:subject:crowdsourced:
+user_text_5:dc:description:level2:
