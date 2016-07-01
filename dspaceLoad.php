@@ -209,9 +209,12 @@
                            fwrite($file_handle_log_out, 'AV string '.$item."\n");
                            $imagenamepos = strpos($item,'\00');
                            $imagenamepos++;
+
                            $photofolderpos = strpos($item, '; 00');
-                           $photofolderpos = $photofolderpos+ 2;
-                           $photofolder = substr($item,$photofolderpos, 15)."/";
+
+                           $photofolderpos = $photofolderpos + 2;
+
+                           $photofolder = substr($item, $photofolderpos, 15) . "/";
 
                            $okphoto = false;
                            $foundit = '';
@@ -297,10 +300,11 @@
 
             if ($collection == 'stcecilia')
             {
+
                 $avusecount = 0;
                 foreach ($avnotearray as $avnote)
                 {
-                    if ($avnote[1] !== '')
+                    if (($avnote[1] !== '') and $avnote[1] !== '0')
                     {
                         $avnoteid = trim($avnote[0]);
                         foreach ($avarray as $avmember)
@@ -584,72 +588,7 @@
         $item = str_replace('♮', '&#9838;', $item);
         return $item;
     }
-    //For deletion- this was rocks-specific. Won't delete just yet.
-    /*
-if ($tag == 'image')
-{
-   $photolen = strlen($item);
-   fwrite($file_handle_log_out,'Image coming in: '.$item.$photolen."\n");
-   if (substr($item,0,4) == 'EUCM')
-   {
-       $stoppos = strpos($item, ".");
-       $item = substr_replace($item, substr($item,0,$stoppos), "");
-       $stoppos2 = strpos($item, ".");
-       $item = substr($item, 0, $stoppos2 -1);
-   }
 
-   switch ($photolen)
-   {
-       case 4:
-           break;
-       case 3:
-           $item = '0'.$item;
-           break;
-       case 2:
-           $item = '00'.$item;
-           break;
-       case 1:
-           $item = '000'.$item;
-           break;
-   }
-
-
-   if (is_dir($imagedirectory))
-   {
-       if ($dh = opendir($imagedirectory))
-       {
-           while (($file = readdir($dh)) !== false)
-           {
-               if (strpos($file, $item) !== false)
-               {
-                   $filepath = $imagedirectory.$file;
-                   $copypath = $subfolder.'/'.$file;
-                   echo $filepath.$copypath.'<br>';
-                   if (!copy($filepath, $copypath))
-                   {
-                       echo "Failed to process: ".$filepath."<br>";
-                       fwrite($file_handle_log_out, 'Failed to process '.$filepath."\n");
-                       $failed_images++;
-
-                   }
-                   else
-                   {
-                       echo 'Processed Image: '.$filepath."<br>";
-                       fwrite($file_handle_log_out, 'Processed Image '.$filepath."\n");
-                       fwrite($file_handle_contents_out, $file."\n");
-                       $processed_images++;
-                   }
-               }
-           }
-           closedir($dh);
-       }
-   }
-   fwrite($file_handle_dc_out, '</dublin_core>');
-   fclose($file_handle_dc_out);
-   fclose($file_handle_contents_out);
-   $folder_name++;
-}
-*/
 ?>
 
 

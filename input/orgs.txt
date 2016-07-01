@@ -1,4 +1,5 @@
-Inst:PUREID:
+Row Labels:PURE Int. ID (alt):
+CERN:5225268:
 Bonn U.:5467573:
 DESY:2632406:
 Manchester U.:212313:
@@ -39,12 +40,14 @@ Gottingen U., II. Phys. Inst.:528850:
 KEK, Tsukuba:11392288:
 SLAC:2630077:
 Barcelona, IFAE:212818:
+Serpukhov, IHEP:21267743:
 Prague, Tech. U.:5112573:
 Stockholm U., OKC:5285656:
 Frascati:24520732:
 Michigan State U.:458425:
 Rio de Janeiro Federal U.:21351101:
 U. Santiago de Compostela (main):10850235:
+AGH-UST, Cracow:6403019:
 Bologna U.:296319:
 Chicago U., EFI:598841:
 Nevis Labs, Columbia U.:2662387:
@@ -59,6 +62,7 @@ Texas U., Arlington:19117524:
 Yale U.:25370611:
 INFN, Bologna:9327351:
 Lancaster U.:284900:
+Prague, Inst. Phys.:14101998:
 Rome U.:17214606:
 Tel Aviv U.:542369:
 Dresden, Tech. U.:17085866:
@@ -121,45 +125,147 @@ Milan U.:1518324:
 Ohio State U.:605679:
 Oklahoma U.:3185572:
 Pittsburgh U.:677496:
+Southern Methodist U.:12370677:
 Sydney U.:554493:
+UFTM, Uberaba:21192481:
+Comenius U.:5795292:
 Genoa U.:7570260:
 Lisbon U.:4371020:
+Simon Fraser U.:12348004:
+Stefan Inst., Ljubljana:3386291:
 Tokyo Inst. Tech.:566481:
+Witwatersrand U.:9124189:
 Cincinnati U.:21148537:
+INFN, Padova:1451379:
 Iowa State U.:575119:
+LIP, Lisbon:5112353:
+Madrid, Autonoma U.:1497128:
+Osaka U.:7541041:
+Rio de Janeiro, CBPF:21149675:
 Rome U., Tor Vergata:17214606:
+U. Barcelona (main):212818:
+Wurzburg U.:2330064:
 Alberta U.:19030648:
 Belgrade U.:19653490:
+British Columbia U.:7948690:
+Dortmund U.:5110980:
+INFN, Genoa:3402420:
 Innsbruck U.:7641470:
+Northern Illinois U.:6216850:
+Pavia U.:13575285:
+Basilicata U., Potenza:21149755:
 Coimbra U.:12084508:
+INFN, Cagliari:2662275:
+INFN, Naples:21284980:
+La Plata U.:21260352:
+Louisiana Tech. U.:5112877:
 Montreal U.:1822269:
+Moscow State U.:9703460:
 Oklahoma State U.:3185572:
+RWTH, Aachen, Phys. Inst.:21267603:
+Shandong U.:10094036:
+SINP, Moscow:21149691:
+SUNY, Albany:2630093:
+Technion:2733258:
+Tufts U.:4738620:
 York U., Canada:299044:
+Ankara U.:21260588:
+Baku, Inst. Phys.:5112285:
 Iowa U.:575119:
+Kurchatov Inst., Moscow:25370559:
 Lisbon U., CFNUL:4371020:
 Maryland U., College Park:18913056:
+Minsk, Inst. Phys.:5112733:
+Nagoya U.:21305772:
+New Mexico U.:10885056:
+Palacky U.:21260645:
+Royal Inst. Tech., Stockholm:25370551:
+Santa Maria U., Valparaiso:11177126:
+Texas U., Dallas:21260729:
 Tsukuba U.:1995053:
 Udine U.:8163419:
+Waseda U.:21260721:
+Yandex Sch. Data Anal., Moscow:21154038:
+Buenos Aires U.:11572066:
 Casablanca U.:3225634:
+INFN, Florence:2311761:
+INFN, Pavia:3389597:
+INFN, Pisa:4997218:
+Kyushu U.:2459479:
 MIT:1688174:
+Oujda U.:5112869:
+Rio de Janeiro, Pont. U. Catol.:21130567:
 Rome U.,Tor Vergata:17214606:
+Rostock U.:18851339:
+Salento U.:5112725:
+Vrije U., Amsterdam:8313671:
 Adelaide U., Sch. Chem. Phys.:240499:
 Bari U.:7503563:
+Bogazici U.:3072214:
 Chile U., Catolica:5752098:
 Colombia, U. Natl.:2634933:
+Fresno State:5112653:
+Gaziantep U.:21260496:
+Giessen U.:2634294:
 Heidelberg, Max Planck Inst.:16884880:
+ICREA, Barcelona:342911:
+INFN, Ferrara:3386517:
 Johannesburg U.:17748164:
+Kharkov, KIPT:21258330:
+Kyoto U.:186995:
 Milan Bicocca U.:1518324:
+Mohammed V U., Agdal:21260633:
+Moscow, INR:21155172:
 Pisa, Scuola Normale Superiore:17058716:
 Stockholm U.:5285656:
+Tbilisi State U.:5112841:
+U. Milan (main):1518324:
+U. Padua (main):212183:
+University Coll., Dublin:270955:
 Belgrade, Inst. Phys.:19653490:
+Cadi Ayyad U., Marrakech:5112893:
 Ferrara U.:24509390:
+INFN, Milan Bicocca:21149699:
+Lomonosov Moscow State U.:19757134:
+Nanjing U.:21350474:
 Naples, Inst. U. Navale:604114:
+Sao Paulo U.:5644198:
+Shanghai Jiao Tong U.:20118412:
+Shinshu U.:23636416:
 Tokyo Metropolitan U.:566481:
+U. Rome La Sapienza (main):2961527:
+Yerevan Phys. Inst.:2756318:
+CAFPE, Granada:21260320:
 Cagliari U.:554529:
+Cape Town U.:2308369:
 Ecole Polytechnique:8468321:
+Fribourg U.:373649:
+Gazi U.:21267772:
 Hamburg U.:10492716:
+Hampton U.:3398608:
+Hanoi U. of Sci.:21221162:
+Hiroshima Inst. Tech.:5113013:
+Ilia State U.:21500129:
+Jagiellonian U.:8388797:
+King's Coll. London:7565178:
+KwaZulu Natal U.:7503407:
+Kyoto U. of Education:19920965:
 Malaya U.:21475143:
+Minho U.:21593601:
+Minsk, High Energy Phys. Ctr.:5112921:
+Nagasaki Inst. Appl. Sci.:1688218:
+Ochanomizu U.:3069230:
+Okayama U.:1212538:
 Porto U.:17783001:
+Ramon Llull U., Barcelona:21149703:
 Regina U.:310186:
-CERN:5225268:
+Sao Joao del-Rei Fed. U.:7570404:
+SISSA, Trieste:1550671:
+South Carolina U.:2450806:
+St. Petersburg Polytechnic Inst.:11913829:
+Tbilisi, Inst. Phys.:21260661:
+Tomsk State U.:11044812:
+U. Modena (main):21220264:
+U. Pisa (main):17058716:
+U. Urbino (main):21287237:
+Van Swinderen Institute:21154034:
