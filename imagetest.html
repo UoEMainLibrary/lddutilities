@@ -11,7 +11,7 @@
     <link href="assets/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/font-awesome/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.css" />
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/leaflet.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
     <script src="https://cdn.rawgit.com/mejackreed/Leaflet-IIIF/master/leaflet-iiif.js"></script>
@@ -26,10 +26,11 @@
     <![endif]-->
 </head>
 <body>
-<!--<h1>OpenSeadragon starring Joseph Black</h1>-->
+
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <!--<script src="assets/bootstrap/js/bootstrap.min.js"></script>-->
 
@@ -57,7 +58,8 @@
         minZoomLevel:       1,
         defaultZoomLevel:   1,
         sequenceMode:       true,
-        tileSources:        "http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/info.json"
+        tileSources:        "http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEsha~3~3~54530~102219/info.json"
+        //tileSources:        "http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEsha~4~4~64742~162982/info.json"
     });
 </script>
 
@@ -70,8 +72,11 @@
         center: [0, 0],
         crs: L.CRS.Simple,
         zoom: 0,
-    }).addLayer(L.tileLayer.iiif('http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEgal~5~5~150474~162914/info.json'));
+    });
+
+    L.tileLayer.iiif('http://lac-luna-test2.is.ed.ac.uk:8181/luna/servlet/iiif/UoEsha~3~3~54530~102219/info.json').addTo(map);
 </script>
+
 </body>
 </html>
 

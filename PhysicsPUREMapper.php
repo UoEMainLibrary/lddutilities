@@ -24,11 +24,12 @@
 <br>
     <img src="images/lddutilities.jpg">
     <h1>INSPIRE HEP to PURE mapping process </h1>
-    <p>Convert your INSPIRE-exported MARCXML to PURE XML here.</p>
+    <p>Convert your INSPIRE-HEP search to PURE XML here.</p>
     <p>Enter your collaboration (e.g. LHCb, Atlas) and year, or run for a single paper.</p>
     <p>Upload your "internal ID" file with three colon-separated parms (INSPIRE ID:PURE ID:Name). Name format is (e.g.) Clarke, P.E.L.</p>
     <p>Upload your "internal Org" file with two colon-separated parms (Name:PURE ID:). Name format is as INSPIRE-HEP.</p>
-    <p>Sample files on github (https://github/UoEMainLibrary/lddutilities/input/[atlasUserMap.txt, LHCbUserMap.txt, atlasOrgs.txt, LHCbOrgs.txt]</p>
+    <p>This code is on github (https://github/UoEMainLibrary/lddutilities/PhysicsPUREMapper.php . You will need download.php too.</p>
+    <p>Sample files on github (https://github/UoEMainLibrary/lddutilities/input/[atlasUserMap.txt, LHCbUserMap.txt, orgs.txt]. There is only one organisations file, which can be used for both processes</p>
 </div>
 <div class = "box">
 
