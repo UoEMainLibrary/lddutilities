@@ -1,0 +1,165 @@
+Inst:PUREID:
+Bonn U.:5467573:
+DESY:2632406:
+Manchester U.:212313:
+Orsay, LAL:21492201:
+Oxford U.:221602:
+Freiburg U.:5853604:
+FOM, Amsterdam:15508993:
+Marseille, CPPM:5112521:
+Glasgow U.:217993:
+LBL, Berkeley:21500546:
+Heidelberg U.:5985805:
+IRFU, Saclay:4996938:
+Valencia U., IFIC:3945559:
+Birmingham U.:203046:
+Brookhaven:5253474:
+Cambridge U.:190150:
+Dubna, JINR:25370523:
+Liverpool U.:245996:
+Mainz U.:2464266:
+Munich, Max Planck Inst.:682163:
+Annecy, LAPP:21176938:
+Geneva U.:2653385:
+Paris U., VI-VII:20172781:
+Edinburgh U.:466114:
+Clermont-Ferrand U.:1282557:
+Ecole Polytechnique, Lausanne:8468321:
+INFN, Rome:17379424:
+Michigan U.:458425:
+Munich U.:4232850:
+Rutherford:564791:
+NIKHEF, Amsterdam:21133496:
+University Coll. London:231328:
+Bucharest, IFIN-HH:25370640:
+Tokyo U., ICEPP:566481:
+Wuppertal U.:19220498:
+Cracow, INP:15098688:
+Gottingen U., II. Phys. Inst.:528850:
+KEK, Tsukuba:11392288:
+SLAC:2630077:
+Barcelona, IFAE:212818:
+Prague, Tech. U.:5112573:
+Stockholm U., OKC:5285656:
+Frascati:24520732:
+Michigan State U.:458425:
+Rio de Janeiro Federal U.:21351101:
+U. Santiago de Compostela (main):10850235:
+Bologna U.:296319:
+Chicago U., EFI:598841:
+Nevis Labs, Columbia U.:2662387:
+Warwick U.:454065:
+Argonne:11177738:
+Bristol U.:220982:
+Charles U.:20173351:
+Kirchhoff Inst. Phys.:5112489:
+Novosibirsk State U.:24518076:
+Tech. U., Dortmund (main):23123142:
+Texas U., Arlington:19117524:
+Yale U.:25370611:
+INFN, Bologna:9327351:
+Lancaster U.:284900:
+Rome U.:17214606:
+Tel Aviv U.:542369:
+Dresden, Tech. U.:17085866:
+LPSC, Grenoble:10850335:
+Pennsylvania U.:3180935:
+Toronto U.:4749338:
+Humboldt U., Berlin:1662038:
+Royal Holloway, U. of London:310986:
+St. Petersburg, INP:15098824:
+SUNY, Stony Brook:10047667:
+Syracuse U.:16211554:
+TRIUMF:1689167:
+Weizmann Inst.:19390660:
+Zurich U.:7570340:
+Arizona U.:252827:
+Bohr Inst.:2908409:
+Harvard U., Phys. Dept.:528960:
+Moscow Phys. Eng. Inst.:21285116:
+Queen Mary, U. of London:5282881:
+Taiwan, Inst. Phys.:21260296:
+UC, Santa Cruz:17738592:
+Victoria U.:16349276:
+Wisconsin U., Madison:611727:
+Carleton U.:1724965:
+Imperial Coll., London:3196358:
+Melbourne U.:17060422:
+Natl. Tech. U., Athens:5112421:
+Oslo U.:253635:
+Sheffield U.:199780:
+UC, Irvine:18791180:
+Bergen U.:5523747:
+Bern U., LHEP:6236653:
+Brandeis U.:9124307:
+Duke U.:3395603:
+Illinois U., Urbana:18768356:
+INFN, Milan:17379404:
+Lebedev Inst.:11177979:
+Lund U.:553906:
+Beijing, Inst. High Energy Phys.:21260460:
+Indiana U.:10885068:
+Kobe U.:21130591:
+Massachusetts U., Amherst:16866385:
+Moscow, ITEP:21149679:
+Oregon U.:677774:
+Pisa U.:17058716:
+Washington U., Seattle:3585583:
+Aristotle U., Thessaloniki:1679471:
+Boston U.:8521391:
+Naples U.:604114:
+New York U.:5532932:
+Rome III U.:17214606:
+Siegen U.:21384884:
+Sussex U.:4212256:
+Uppsala U., Inst. Theor. Phys.:11824590:
+Athens U.:14998329:
+Calabria U.:5309361:
+Hefei, CUST:5767286:
+McGill U.:8039168:
+Milan U.:1518324:
+Ohio State U.:605679:
+Oklahoma U.:3185572:
+Pittsburgh U.:677496:
+Sydney U.:554493:
+Genoa U.:7570260:
+Lisbon U.:4371020:
+Tokyo Inst. Tech.:566481:
+Cincinnati U.:21148537:
+Iowa State U.:575119:
+Rome U., Tor Vergata:17214606:
+Alberta U.:19030648:
+Belgrade U.:19653490:
+Innsbruck U.:7641470:
+Coimbra U.:12084508:
+Montreal U.:1822269:
+Oklahoma State U.:3185572:
+York U., Canada:299044:
+Iowa U.:575119:
+Lisbon U., CFNUL:4371020:
+Maryland U., College Park:18913056:
+Tsukuba U.:1995053:
+Udine U.:8163419:
+Casablanca U.:3225634:
+MIT:1688174:
+Rome U.,Tor Vergata:17214606:
+Adelaide U., Sch. Chem. Phys.:240499:
+Bari U.:7503563:
+Chile U., Catolica:5752098:
+Colombia, U. Natl.:2634933:
+Heidelberg, Max Planck Inst.:16884880:
+Johannesburg U.:17748164:
+Milan Bicocca U.:1518324:
+Pisa, Scuola Normale Superiore:17058716:
+Stockholm U.:5285656:
+Belgrade, Inst. Phys.:19653490:
+Ferrara U.:24509390:
+Naples, Inst. U. Navale:604114:
+Tokyo Metropolitan U.:566481:
+Cagliari U.:554529:
+Ecole Polytechnique:8468321:
+Hamburg U.:10492716:
+Malaya U.:21475143:
+Porto U.:17783001:
+Regina U.:310186:
+CERN:5225268:
