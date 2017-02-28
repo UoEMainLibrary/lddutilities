@@ -30,6 +30,7 @@ parse_str($_SERVER['QUERY_STRING']);
 ########## Change the following variables ################
 $docbase = '/Users/srenton1/Projects/lddutilities/';
 //Test vars
+/*
 $consumer_key = "uoeimagev4bP2";
 $consumer_secret = "1PJxU6mTNQS4QhPcZh0nvuDOvy073G";
 //PHP server test vars
@@ -38,13 +39,14 @@ $consumer_secret = "1PJxU6mTNQS4QhPcZh0nvuDOvy073G";
 
 
 $server_address = "http://lac-luna-test2.is.ed.ac.uk:8181";
-/*
+*/
+
 //Live vars
 $consumer_key = "uoeimageAPqoa";
 $consumer_secret = "zcTbfbQEGc9qxCqux9HWlpL1hbWT6C";
 
 $server_address = "http://lac-luna-live4.is.ed.ac.uk:8181";
-*/
+
 $working_dir = "http://localhost/lddutilities";
 
 ##########################################################
@@ -311,8 +313,8 @@ elseif ( $command == "urlgetter") {
         //For Art/MIMEd, use repro_id_number
         //$url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_id_number&search_value=".$repro_id;
         //For DIU, use repro_record_id
-        $url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_record_id&search_value=".$repro_id;
-        echo $url;
+        $url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_link_id&search_value=".$repro_id;
+        echo $url.";";
         try {
             $oauth->fetch($url, null, OAUTH_HTTP_METHOD_GET, array('Content-Type' => 'text/xml'));
         } catch (Exception $e) {
@@ -322,7 +324,11 @@ elseif ( $command == "urlgetter") {
             $errorcount++;
         }
         $result = $oauth->getLastResponse();
+
+
         $xml = simplexml_load_string($result);
+
+
 
         if ($xml === false) {
             die('Error parsing XML');
@@ -330,6 +336,7 @@ elseif ( $command == "urlgetter") {
         $i = 0;
 
         foreach ($xml->item as $item) {
+
 
             $recordId = $item->recordId;
             $mediaId = $item->mediaId;
@@ -446,7 +453,7 @@ echo'
         //$url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_id_number&search_value=".$repro_id;
         //For DIU, use repro_record_id
         $url = $_SESSION['server_address'] . "/editor/e/api/collections/" . $collection . "/records/?search_field=work_record_id&search_value=" . $work_record_id;
-        echo $url."<br>";
+        echo $url.";";
         try {
             $oauth->fetch($url, null, OAUTH_HTTP_METHOD_GET, array('Content-Type' => 'text/xml'));
         } catch (Exception $e) {

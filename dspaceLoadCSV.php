@@ -35,6 +35,7 @@
         $error = '';
         $docbase = '/Users/srenton1/Projects/lddutilities/';
         $infile = $docbase.'/files/input.csv';
+        $infile_open = fopen($infile, "r") or die ("can't open in file");
         $mappingfile = $docbase.'/files/mappingCSV.txt';
         $file_handle_map_in = fopen($mappingfile, "r") or die ("can't open mapping file");
         $dublincorefile = 'dublin_core.xml';
@@ -50,7 +51,8 @@
         $failed_images = 0;
         $processed_images = 0;
         $c = 0;
-        $k = 0;         
+        $k = 0;
+        $dodgy = 0;
         while (!feof($file_handle_map_in)) {
             $line = fgets($file_handle_map_in);
             $map = explode(":", $line);
@@ -59,17 +61,26 @@
             $mapping[$k][2] = $map[2];
             $mapping[$k][3] = $map[3];
             $k++;
-        }                
-
+        }
+        $line = '';
+        $numcols = 0;
+        $batchcount = 0;
+        while ($line = fgetcsv($infile_open))
+        {
+            // count($line) is the number of columns
+            $numcols = count($line);
+        }
+        fclose ($infile_open);
         $file = file_get_contents($infile);
         $data = array_map("str_getcsv", preg_split('/\r*\n+|\r+/', $file));
         $directory = $docbase.'/files/dspaceNew/';
+        $nomatchfiles = 0;
 
         foreach ($data as $key=>$value)
         {
            if ($key == 0)
            {
-               for ($i=0; $i < 12; $i++)
+               for ($i=0; $i < $numcols; $i++)
                {
                    $headerarray[$i] = $value[$i];
                }
@@ -77,7 +88,7 @@
            else
            {
 
-                $subfolder = $directory.$key;
+                $subfolder = str_pad($directory.$key,5,"0");
                 if (!(file_exists($subfolder)))
                 {
                     mkdir($subfolder);
@@ -89,12 +100,12 @@
                 }
 
                 $j = 0;
-                for ($j = 0; $j<12; $j ++)
+                for ($j = 0; $j<$numcols; $j ++)
                 {
-                    if ($headerarray[$j] == 'file1' or $headerarray[$j] == 'file2' or $headerarray[$j] == 'file3')
+                    if ($headerarray[$j] == 'file1' or $headerarray[$j] == 'file2' or $headerarray[$j] == 'file3' or $headerarray[$j] == 'file4')
                     {
-
                         $photono = $value[$j];
+                        $matchedname = false;
 
                         fwrite($file_handle_log_out, "Bitstream: ".$photono."\n");
 
@@ -104,10 +115,10 @@
                             {
                                 while (($file = readdir($dh)) !== false)
                                 {
-                                    //echo $photono."versus".$file."<br>";
+                                   // echo $photono."versus".$file."<br>";
                                     if (strtoupper($file) == strtoupper($photono))
                                     {
-
+                                        $matchedname = true;
                                         $filepath = $photodirectory.$file;
                                         $copypath = $subfolder.'/'.$file;
                                         if (!copy($filepath, $copypath))
@@ -126,6 +137,14 @@
 
                                     }
                                 }
+                            }
+                        }
+                        if (!$matchedname)
+                        {
+                            if ($photono != '') {
+                                echo $photono . " did not have a corresponding pdf<br>";
+                                fwrite($file_handle_log_out, $photono . " did not have a corresponding pdf\n");
+                                $nomatchfiles++;
                             }
                         }
                     } 
@@ -153,12 +172,28 @@
                fwrite($file_handle_log_out, "<br>");
                 fclose($file_handle_dc_out);
                 fclose($file_handle_contents_out);
+               if ($j < $numcols)
+               {
+                   $dodgy++;
+               }
             }
         }
-    echo '<h2>FAILED BITSTREAMS'.$failed_images.'</h2>';
+    echo '<h2>UNMATCHED FILENAMES: '.$nomatchfiles.'</h2>';
+    fwrite($file_handle_log_out, 'UNMATCHED FILENAMES: '.$nomatchfiles."\n");
+    echo '<h2>FAILED BITSTREAMS: '.$failed_images.'</h2>';
     fwrite($file_handle_log_out, "FAILED BITSTREAMS: ".$failed_images."\n");
     echo '<h2>PROCESSED BITSTREAMS: '.$processed_images.'</h2>';
     fwrite($file_handle_log_out, "PROCESSED BITSTREAMS: ".$processed_images."\n\n");
+    echo '<h2>DODGY ROWS: '.$dodgy.'</h2>';
+    fwrite($file_handle_log_out, "CSV ROWS: ".$j."\n\n");
+
+    if ($dodgy == 0)
+    {
+        echo '<h2>CLEAN LOAD!</h2>';
+    }
+    else{
+        echo '<h2>WE HAVE DODGY ROWS. RERUN.</h2>';
+    }
     fclose($file_handle_in);
 
     function special_chars($item)
