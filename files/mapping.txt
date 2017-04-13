@@ -124,3 +124,4 @@ user_sym_60:dc:coverage:spatialcase:
 user_sym_59:dc:coverage:spatialgallery:
 user_sym_61:dc:coverage:spatialhighlights:
 user_sym_62:dc:contributor:authorpermalink:
+user_auth_mv4:dc:coverage:spatiallogical:

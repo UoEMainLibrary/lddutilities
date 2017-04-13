@@ -189,7 +189,6 @@
                        {
                            $subfolder = $directory.$foldername;
                        }
-
                        if (!(file_exists($subfolder)))
                        {
                            mkdir($subfolder);

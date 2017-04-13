@@ -314,7 +314,7 @@ elseif ( $command == "urlgetter") {
         //$url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_id_number&search_value=".$repro_id;
         //For DIU, use repro_record_id
         $url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_link_id&search_value=".$repro_id;
-        echo $url.";";
+        //echo $url.";";
         try {
             $oauth->fetch($url, null, OAUTH_HTTP_METHOD_GET, array('Content-Type' => 'text/xml'));
         } catch (Exception $e) {
@@ -342,7 +342,7 @@ elseif ( $command == "urlgetter") {
             $mediaId = $item->mediaId;
 
             $outurl = "http://images.is.ed.ac.uk/luna/servlet/detail/".$collection."~".$recordId."~".$mediaId;
-            echo $outurl."<br>";
+            echo $repro_id.':'.$outurl."<br>";
             if (!$outurl == null) {
                 fwrite($file_handle_out, $repro_id . ':' . $outurl . "\n");
             }
