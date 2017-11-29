@@ -45,8 +45,8 @@ $server_address = "http://lac-luna-test2.is.ed.ac.uk:8181";
 $consumer_key = "uoeimageAPqoa";
 $consumer_secret = "zcTbfbQEGc9qxCqux9HWlpL1hbWT6C";
 
-$server_address = "http://lac-luna-live4.is.ed.ac.uk:8181";
-
+//$server_address = "http://lac-luna-live4.is.ed.ac.uk:8181";
+$server_address = "https://images.is.ed.ac.uk";
 $working_dir = "http://localhost/lddutilities";
 
 ##########################################################
@@ -113,7 +113,8 @@ elseif( $command == "ready" )
     printf("<a href=\"".$working_dir."/oauth.php?command=collection\">collection</a><br><br>");
     printf("<a href=\"".$working_dir."/oauth.php?command=tagger\">tagger</a><br><br>");
     printf("<a href=\"".$working_dir."/oauth.php?command=keyword\">get keywords</a><br><br>");
-    printf("<a href=\"".$working_dir."/oauth.php?command=urlgetter\">get LUNA URL for Work Record ID</a><br><br>");
+    printf("<a href=\"".$working_dir."/oauth.php?command=urlgetter\">get LUNA URL for Repro ID</a><br><br>");
+    printf("<a href=\"".$working_dir."/oauth.php?command=urlgettervernonupdate\">generate Vernon IIIF update XML</a ><br ><br>");
     printf("<a href=\"".$working_dir."/oauth.php?command=vernoninsert\">insert record ids</a><br><br>");
     printf("<a href=\"".$working_dir."/oauth.php?command=xmlrecord\">XML record for Work Record ID</a><br><br>");
 
@@ -349,6 +350,85 @@ elseif ( $command == "urlgetter") {
         }
 
     }
+}
+elseif ( $command == "urlgettervernonupdate") {
+    ini_set('max_execution_time', 400);
+
+    $input_file = $docbase . "input/urlrequestwithsystemid.txt";
+    $out_file = $docbase . "output/vernon_md.xml";
+    $file_handle_in = fopen($input_file, "r") or die("can't open infilek".$input_file);
+    $file_handle_out = fopen($out_file, "w") or die("can't open outfile");
+    $i = 0;
+
+    fwrite($file_handle_out, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fwrite($file_handle_out, "<recordset>\n");
+
+    while (!feof($file_handle_in)) {
+        $line =trim(fgets($file_handle_in));
+        $map = explode(";",$line);
+
+        $mapping[$i][0]=$map[0];
+        $mapping[$i][1]= $map[1];
+        $mapping[$i][2]= $map[2];
+
+
+        $collection_no = $mapping[$i][2];
+        $collection = collection_get($collection_no);
+        $repro_id = $mapping[$i][1];
+        $system_id = $mapping[$i][0];
+
+        $access_token = $_SESSION['access_token'];
+        $access_token_secret = $_SESSION['access_token_secret'];
+        $oauth = new OAuth($_SESSION['consumer_key'], $_SESSION['consumer_secret']);
+        $oauth->setToken($access_token, $access_token_secret);
+        $response_info = $oauth->getLastResponseInfo();
+        header("Content-Type: ".$response_info["content_type"]);
+        //For Art/MIMEd, use repro_id_number
+        //$url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_id_number&search_value=".$repro_id;
+        //For DIU, use repro_record_id
+        $url =$_SESSION['server_address'] . "/editor/e/api/collections/" . $collection. "/records/?search_field=repro_link_id&search_value=".$repro_id;
+        //echo $url.";";
+        try {
+            $oauth->fetch($url, null, OAUTH_HTTP_METHOD_GET, array('Content-Type' => 'text/xml'));
+        } catch (Exception $e) {
+            echo $e->getCode();
+            echo $e->getMessage();
+            echo $e->lastResponse;
+            $errorcount++;
+        }
+        $result = $oauth->getLastResponse();
+
+
+        $xml = simplexml_load_string($result);
+
+
+
+        if ($xml === false) {
+            die('Error parsing XML');
+        }
+        $i = 0;
+        fwrite($file_handle_out, "<record>\n");
+        foreach ($xml->item as $item) {
+
+
+            $recordId = $item->recordId;
+            $mediaId = $item->mediaId;
+
+            $outurl = "http://images.is.ed.ac.uk/luna/servlet/detail/".$collection."~".$recordId."~".$mediaId;
+            $iiifurl = str_replace("detail", "iiif",$outurl);
+            $iiifurl = $iiifurl."/full/full/0/default.jpg";
+            echo $repro_id.':'.$outurl."<br>";
+            if (!$outurl == null) {
+                fwrite($file_handle_out, "<id>".$system_id."</id>\n");
+                fwrite($file_handle_out, "<im_ref>".$iiifurl."</im_ref>\n");
+                fwrite($file_handle_out, "<luna_url>".$outurl."</luna_url>\n");
+                fwrite($file_handle_out, "<luna_notes>LUNA URL</luna_notes>\n");
+            }
+        }
+        fwrite($file_handle_out, "</record>\n");
+
+    }
+    fwrite($file_handle_out, "</recordset>");
 }
 elseif ( $command == "vernoninsert"){
     $input_file = $docbase."input/testids.txt";

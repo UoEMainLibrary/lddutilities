@@ -178,8 +178,8 @@ Sub CreateXML()
                     'Get copyright & licence text
                     Select Case Cells(i, 10)
                          Case "LHSA-Y"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright and Data Protection Restrictions. Not for Public Access." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright and Data Protection Restrictions. Not for Public Access." & valueefieldeentitye
+                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright Lothian Health Services Archive. Please contact for permissions and further information." & valueefieldeentitye
+                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright Lothian Health Services Archive. Please contact for permissions and further information." & valueefieldeentitye
                             licenceString = ""
                         Case Else
                             rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "No copyright information available." & valueefieldeentitye
@@ -505,7 +505,7 @@ MsgBox "Hello LHSA!"
             Open embedcmd For Output Lock Write As #1
             Select Case Cells(i, 10)
                 Case "LHSA-Y"
-                    copyrightstring = "Copyright and Data Protection Restrictions. Not for Public Access."
+                    copyrightstring = "Copyright Lothian Health Services Archive. Please contact for permissions and further information."
                 Case Else
                     copyrightstring = "No copyright information available."
             End Select

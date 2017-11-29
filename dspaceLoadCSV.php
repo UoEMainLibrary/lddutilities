@@ -29,7 +29,7 @@
     </div>
 
     <?php
-        ini_set('max_execution_time', 400);
+        ini_set('max_execution_time', 1800);
         echo '<div class = "box">';
 
         $error = '';
@@ -131,6 +131,7 @@
                                         {
                                             echo 'Bitstream processed'. $filepath."<br>";
                                             fwrite($file_handle_contents_out, $file."\n");
+                                            echo 'Check contents file for '.$file;
                                             fwrite($file_handle_log_out, "Processed: ".$photono."\n");
                                             $processed_images++;
                                         }

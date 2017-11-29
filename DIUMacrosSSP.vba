@@ -147,7 +147,7 @@ Sub CreateXML()
                 If InStr(Cells(i,27), "ignet") > 0 Then
                    holding = "Signet Library"
                 Else
-                   If InStr(Cells,(i,27), "dvocate") > 0 Then
+                   If InStr(Cells(i,27), "dvocate") > 0 Then
                       holding = "The Advocates Library"
                    Else
                       holding = "University of Edinburgh"
