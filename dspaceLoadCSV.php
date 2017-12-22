@@ -102,7 +102,8 @@
                 $j = 0;
                 for ($j = 0; $j<$numcols; $j ++)
                 {
-                    if ($headerarray[$j] == 'file1' or $headerarray[$j] == 'file2' or $headerarray[$j] == 'file3' or $headerarray[$j] == 'file4')
+                    $pos = strpos($headerarray[$j],'file');
+                    if ($pos !== false)
                     {
                         $photono = $value[$j];
                         $matchedname = false;

@@ -121,7 +121,7 @@ user_auth_mv5:dc:subject:crowdsourced:
 user_text_5:dc:description:level2:
 user_sym_60:dc:coverage:spatialcase:
 user_sym_59:dc:coverage:spatialgallery:
-user_sym_61:dc:coverage:spatialhighlights:
 user_sym_62:dc:contributor:authorpermalink:
 user_auth_mv4:dc:coverage:spatiallogical:
-usual_loc_being:dc:coverage:temporalloc:
+usual_loc_being:dc:coverage:spatialloc:
+user_sym_66:dc:coverage:spatialcoord:

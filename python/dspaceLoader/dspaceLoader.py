@@ -112,8 +112,9 @@ for child in root:
                 object.text = object.text[:4]    
             itemaccno = object.text    
             f = open(collection +"/" + environment + "mapfile.txt")
-            for accno in f.readlines():
-                if itemaccno in accno:
+            for line in f.readlines():
+                accno = line.split(' ')[0]
+                if itemaccno == accno:
                     existing = truevar
                 j = j +1
             if existing == truevar:
@@ -243,7 +244,7 @@ for child in root:
                         related = data["@id"]
                     canvasarray = []
                     canvasarray =data["sequences"][0]["canvases"][0]
-                    canvasesarray.append(canvasarray)  
+                    canvasesarray.append(canvasarray)
                 im = im + 1    
             sequencesarray.append({ "@type": "sc:Sequence",
                                "viewingHint" : "individuals",
@@ -289,7 +290,7 @@ for child in root:
         file.close()  
 f = open(collection +"/" + environment + "mapfile.txt")
 for accno in f.readlines():
-    accno = accno.split('\t')
+    accno = accno.split(' ')
     found = 0
     try:
         found = os.path.isdir(existingfolder + accno[0])

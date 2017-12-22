@@ -536,12 +536,21 @@ MsgBox "Hello!"
 
     execdir = "T:\diu\Worksheets\"
     MsgBox execdir
+
+    dt = Format(CStr(Now), "yyy_mm_dd_hh_mm")
+    embedcmd = "T:\diu\Worksheets\embed\" & dt & ".bat"
+    MsgBox embedcmd
+
+    Open embedcmd For Output Lock Write As #1
+    Print #1, "cd /D T: > " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>&1"
+    Print #1, "cd " & Chr(34) & "T:\diu\Worksheets\exiv2" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>>&1"
+    Print #1, "echo " & Chr(34) & "directory is: " & Chr(34) & "%cd% >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>>&1"
+
     For i = 5 To lRows
         If Cells(i, 32) = "R" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageNo = Left(Cells(i, 8), 7)
-            embedcmd = "T:\diu\Worksheets\embed\" & imageNo & ".bat"
-            Open embedcmd For Output Lock Write As #1
+
             Select Case Cells(i, 10)
                 Case "UoE-Y"
                     copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright The University of Edinburgh. Free use."
@@ -565,7 +574,7 @@ MsgBox "Hello!"
                     copyrightstring = "No copyright information available."
             End Select
 
-            titleString = "Title: " & Cells(i, 13) & "; Author: " & Cells(i, 16) & "; Case No: " & Cells(i, 17) & "; Page No: " & Cells(i,18) & "; Shelfmark: " & Cells(i, 12) & "; Date: " & Cells(i, 14)
+            titleString = "Title: " & Cells(i, 13) & "; Author: " & Cells(i, 16) & "; Page No: " & Cells(i, 17) & "; Shelfmark: " & Cells(i, 12) & "; Date: " & Cells(i, 14)
             descString = "Collection: " & Cells(i, 22) & "; Persons: " & Cells(i, 23) & "; Event: " & Cells(i, 25) & "; Place: " & Cells(i, 20) & "; Category: " & Cells(i, 19) & "; Description: " & Cells(i, 21)
             city = "Edinburgh"
             postcode = "EH8 9LJ"
@@ -576,10 +585,7 @@ MsgBox "Hello!"
             diu = "Digital Imaging Unit"
             URL = "http://www.lib.ed.ac.uk/resources/collections/crc/index.html"
 
-            Print #1, "cd /D T: > " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>&1"
-            Print #1, "cd " & Chr(34) & "T:\diu\Worksheets\exiv2" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "echo " & Chr(34) & "directory is: " & Chr(34) & "%cd% >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
-            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Headline String " & imageNo & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Headline String " & imageNo & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " > " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
             Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Copyright String " & copyrightstring & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
             Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.dc.creator XmpSeq " & diu & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
             Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Caption String " & descString & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
@@ -592,15 +598,15 @@ MsgBox "Hello!"
             Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork XmpText " & Email & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
             Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork XmpText " & URL & Chr(34) & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
 
-            Close #1
-
-            retval1 = Shell(Chr(34) & embedcmd & Chr(34), vbNormalFocus)
-
             Cells(i, 32) = "E"
 
         End If
-    Next
 
+    Next
+    Close #1
+    shellstring = Chr(34) & embedcmd & Chr(34)
+    Call Shell("cmd.exe /S /C " & shellstring, vbNormalFocus)
+    'retval1 = Shell(Chr(34) & embedcmd & Chr(34), vbNormalFocus)
 
 End Sub
 
@@ -616,24 +622,27 @@ MsgBox "Hello!"
     lRows = oWorksheet.Rows.Count
 
     execdir = "T:\diu\Worksheets\"
+    dt = Format(CStr(Now), "yyy_mm_dd_hh_mm")
+    copybackcmd = "T:\diu\Worksheets\copyback\" & dt & ".bat"
+    Open copybackcmd For Output Lock Write As #1
     For i = 5 To lRows
         If Cells(i, 32) = "E" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageNo = Left(Cells(i, 8), 7)
-            copybackcmd = "T:\diu\Worksheets\copyback\" & imageNo & ".bat"
-            Open copybackcmd For Output Lock Write As #1
+
 
             Print #1, "move T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif*  T:\diu\Crops\" & folder & "Process\" & imageNo & "c.tif"
             'Print #1, "copy T:\diu\Crops\" & folder & "Process\" & imageNo & "c.tif*  T:\diu\Crops\" & folder & imageNo & "c.tif"
-
-            Close #1
-
-            retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
 
             Cells(i, 32) = "X"
 
         End If
     Next
 
+    Close #1
+
+    shellstring = Chr(34) & copybackcmd & Chr(34)
+    Call Shell("cmd.exe /S /C " & shellstring, vbNormalFocus)
+    'retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
 
 End Sub

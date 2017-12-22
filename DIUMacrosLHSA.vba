@@ -549,6 +549,77 @@ MsgBox "Hello LHSA!"
 
 End Sub
 
+
+Sub Embed()
+MsgBox "Hello!"
+
+    Set oWorksheet = ThisWorkbook.Worksheets(1)
+    sName = oWorksheet.Name
+    MsgBox oWorksheet.Name
+
+    lCols = oWorksheet.Columns.Count
+
+    lRows = oWorksheet.Rows.Count
+
+    execdir = "T:\lhsa-images\Worksheets\"
+    MsgBox execdir
+
+    dt = Format(CStr(Now), "yyy_mm_dd_hh_mm")
+    embedcmd = "T:\lhsa-images\Worksheets\embed\" & dt & ".bat"
+
+    Open embedcmd For Output Lock Write As #1
+    Print #1, "cd /D T: > " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>&1"
+    Print #1, "cd " & Chr(34) & "T:\lhsa-images\Worksheets\exiv2" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>>&1"
+    Print #1, "echo " & Chr(34) & "directory is: " & Chr(34) & "%cd% >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & "connection.txt" & Chr(34) & " 2>>&1"
+
+    For i = 5 To lRows
+        If Cells(i, 32) = "R" Then
+            folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
+            imageNo = Left(Cells(i, 8), 7)
+
+            Select Case Cells(i, 10)
+                Case "LHSA-Y"
+                    copyrightstring = "Copyright Lothian Health Services Archive. Please contact for permissions and further information."
+                Case Else
+                    copyrightstring = "No copyright information available."
+            End Select
+
+            titleString = "Title: " & Cells(i, 13) & "; Author: " & Cells(i, 16) & "; Page No: " & Cells(i, 17) & "; Shelfmark: " & Cells(i, 12) & "; Date: " & Cells(i, 14)
+            descString = "Collection: " & Cells(i, 22) & "; Persons: " & Cells(i, 23) & "; Event: " & Cells(i, 25) & "; Place: " & Cells(i, 20) & "; Category: " & Cells(i, 19) & "; Description: " & Cells(i, 21)
+            city = "Edinburgh"
+            postcode = "EH8 9LJ"
+            extrAdr = "Lothian Health Services Archive, Centre for Research Collections, Edinburgh University Library, George Square"
+            country = "UK"
+            tel = "0131 6511 720"
+            Email = "is-crc@ed.ac.uk"
+            diu = "Digital Imaging Unit"
+            URL = "www.lhsa.lib.ed.ac.uk"
+
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Headline String " & imageNo & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Copyright String " & copyrightstring & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.dc.creator XmpSeq " & diu & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.Caption String " & descString & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Iptc.Application2.ObjectName String " & titleString & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity XmpText " & city & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode XmpText " & postcode & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrExtadr XmpText  " & extrAdr & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCtry XmpText " & country & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiTelWork XmpText " & tel & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiEmailWork XmpText " & Email & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+            Print #1, "exiv2 -M " & Chr(34) & "set  Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiUrlWork XmpText " & URL & Chr(34) & " " & Chr(34) & "T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif" & Chr(34) & " >> " & Chr(34) & "T:\lhsa-images\Worksheets\error\" & imageNo & ".txt" & Chr(34) & " 2>>&1"
+
+            Cells(i, 32) = "E"
+
+        End If
+
+    Next
+    Close #1
+    shellstring = Chr(34) & embedcmd & Chr(34)
+    Call Shell("cmd.exe /S /C " & shellstring, vbNormalFocus)
+    'retval1 = Shell(Chr(34) & embedcmd & Chr(34), vbNormalFocus)
+
+End Sub
+
 Sub Rename()
 MsgBox "Hello LHSA!"
 
@@ -561,24 +632,23 @@ MsgBox "Hello LHSA!"
     lRows = oWorksheet.Rows.Count
 
     execdir = "T:\lhsa-images\Worksheets\"
-    For i = 4 To lRows
+    dt = Format(CStr(Now), "yyy_mm_dd_hh_mm")
+    copybackcmd = "T:\lhsa-images\Worksheets\copyback\" & dt & ".bat"
+    Open copybackcmd For Output Lock Write As #1
+    For i = 5 To lRows
         If Cells(i, 32) = "E" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageNo = Left(Cells(i, 8), 7)
-            copybackcmd = "T:\lhsa-images\Worksheets\copyback\" & imageNo & ".bat"
-            Open copybackcmd For Output Lock Write As #1
-
             Print #1, "move T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "m.tif*  T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif"
-            'Print #1, "copy T:\lhsa-images\Crops\" & folder & "Process\" & imageNo & "c.tif*  T:\lhsa-images\Crops\" & folder & imageNo & "c.tif"
-
-            Close #1
-
-            retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
-
             Cells(i, 32) = "X"
 
         End If
     Next
 
+    Close #1
+
+    shellstring = Chr(34) & copybackcmd & Chr(34)
+    Call Shell("cmd.exe /S /C " & shellstring, vbNormalFocus)
+    'retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
 
 End Sub
