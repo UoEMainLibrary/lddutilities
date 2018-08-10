@@ -49,17 +49,17 @@ Sub CreateXML()
     summfile = "T:\diu\Worksheets\csv\summary.txt"
 
   'initialise counts
-    i = 5
+    i = 4
     sspcount = 0
 
      Close #99
     Open summfile For Output Lock Write As #99
 
+    MsgBox lRows
+
     'Process all rows
-    For i = 5 To lRows
-
-
-        processed = Cells(i, 40)
+    For i = 4 To lRows
+        processed = Cells(i, 22)
         Dim personArray() As String
         Dim categoryArray() As String
         Dim creatorArray() As String
@@ -121,12 +121,13 @@ Sub CreateXML()
 
         'If ready to process act, otherwise bypass
         If processed = "X" Then
-            coll = Cells(i, 22)
+            coll = Cells(i, 7)
             If coll <> "" Then
                 badcoll = "N"
                 'Get collection tla
                 Select Case coll
-                    Case "Scottish Session Papers"
+
+                    Case "Court of Session Papers"
                         sspcoll = coll
                         shortcoll = "ssp"
                    Case Else
@@ -144,14 +145,10 @@ Sub CreateXML()
                 ccby = "<![CDATA[<a href = " & Chr(34) & "https://creativecommons.org/licenses/by/3.0/" & Chr(34) & " target=" & Chr(34) & "_blank" & Chr(34) & "><img src = " & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/by.jpg" & Chr(34) & "/></a>]]>"
                 ccbyncnd = "<![CDATA[<a href = " & Chr(34) & "https://creativecommons.org/licenses/by-nc-nd/3.0/" & Chr(34) & " target=" & Chr(34) & "_blank" & Chr(34) & "><img src = " & Chr(34) & "http://lac-luna-live4.is.ed.ac.uk:8181/graphics/byncnd.jpg" & Chr(34) & "/></a>]]>"
                 reproFileType = fields & "repro_file_type" & fieldcvalues & "Cropped TIFF" & valueefielde
-                If InStr(Cells(i,27), "ignet") > 0 Then
-                   holding = "Signet Library"
+                If Cells(i, 5) = "" Then
+                   holding = "Unassigned"
                 Else
-                   If InStr(Cells(i,27), "dvocate") > 0 Then
-                      holding = "The Advocates Library"
-                   Else
-                      holding = "University of Edinburgh"
-                   End If
+                   holding = Cells(i, 5)
                 End If
                 holdingInstitution = fields & "holding_institution" & fieldcvalues & holding & valueefielde
                 reproCreatorName = entitys & "repro_creator" & entitycfieldst & "repro_creator_name" & fieldcvalues & "Digital Imaging Unit" & valueefielde
@@ -164,87 +161,48 @@ Sub CreateXML()
                 End If
 
                 'Don't process if no title
-                If Cells(i, 13) = "" Then
-                   goodrecord = "N"
-                   MsgBox "major problem- no Title!" & " " & coll & " " & Cells(i, 8) & Cells(i, 9)
-                Else
-                   titleString = specialChars(Cells(i, 13))
-                End If
+                'If Cells(i, 13) = "" Then
+                '   goodrecord = "N"
+                '  MsgBox "major problem- no Title!" & " " & coll & " " & Cells(i, 8) & Cells(i, 9)
+                'Else
+                titleString = "Scottish Court of Session Papers"
+                'End If
 
                 'If no work record ID (in column 8 OR 9, don't process)
                 If Cells(i, 8) = "" Then
-                    workString = Left(Cells(i, 9), 7)
+                    goodrecord = "N"
                 Else
                     workString = Left(Cells(i, 8), 7)
                 End If
 
                 If workString = "" Then
                    goodrecord = "N"
-                   MsgBox "major problem- no image Id!" & " " & coll & " " & " " & Cells(i, 13) & " " & Cells(i, 17)
+                   MsgBox "major problem- no image Id!" & " " & coll & " " & " " & Cells(i, 5) & " " & Cells(i, 9)
                 End If
 
                 If goodrecord = "Y" Then
                     'Get copyright & licence text
-                    Select Case Cells(i, 10)
-                        Case "UoE-Y"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh. Free use." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = entitys & "licence" & entitycfieldst & "licence" & fieldcvalues & ccby & valueefieldeentitye
-                        Case "UoE-N"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh. Not for Public Access." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = ""
-                        Case "Orphan"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright unknown, orphan work." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = entitys & "licence" & entitycfieldst & "licence" & fieldcvalues & ccby & valueefieldeentitye
-                        Case "UoE&A-Y"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has been granted for specific use by the University of Edinburgh." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = entitys & "licence" & entitycfieldst & "licence" & fieldcvalues & ccbyncnd & valueefieldeentitye
-                        Case "UoE&A-N"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = ""
-                        Case "DataP"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright in the original may be University of Edinburgh or rest elsewhere. Data Protection restrictions." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = ""
-                        Case "Loan"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for  use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = ""
-                        Case "OC"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Out of Copyright." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright The University of Edinburgh." & valueefieldeentitye
-                            licenceString = entitys & "licence" & entitycfieldst & "licence" & fieldcvalues & ccby & valueefieldeentitye
-                         Case "LHSA"
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Copyright and Data Protection Restrictions. Not for Public Access." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright and Data Protection Restrictions. Not for Public Access." & valueefieldeentitye
-                            licenceString = ""
-                        Case Else
-                            rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "No copyright information available." & valueefieldeentitye
-                            reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "No copyright information available." & valueefieldeentitye
-                            licenceString = ""
-                    End Select
+                    rightsStatement = entitys & "rights" & entitycfieldst & "work_rights_statement" & fieldcvalues & "Out of Copyright." & valueefieldeentitye
+                    reproRightsStatement = entitys & "repro_rights" & entitycfieldst & "repro_rights_statement" & fieldcvalues & "Copyright University of Edinburgh Library." & valueefieldeentitye
+                    licenceString = entitys & "licence" & entitycfieldst & "licence" & fieldcvalues & ccby & valueefieldeentitye
 
                     'Process fields by column
-                    If Cells(i, 17) = "" Then
+                    'If Cells(i, 9) = "" Then
                         subsetIndex = ""
                         relatedWorkVolPageNo = entitye
                         reproTitle = entitys & "repro_title" & entitycfieldst & "repro_title" & fieldcvalues & titleString & valueefieldeentitye
-                    Else
-                        pageString = specialChars(Cells(i, 17))
-                        seqString = specialChars(Cells(i, 18))
-                        subsetIndex = fields & "work_subset_index" & fieldcvalues & pageString & valueefielde
-                        If shortcoll = "ssp" Then
-                            relatedWorkVolPageNo = entitye
-                            reproTitle = entitys & "repro_title" & entitycfieldst & "repro_title" & fieldcvalues & "Case " & pageString & ", " & "Page " & seqString & valueefieldeentitye
-                        Else
-                            relatedWorkVolPageNo = fields & "work_source_page_no" & fieldcvalues & pageString & valueefieldeentitye
-                            reproTitle = entitys & "repro_title" & entitycfieldst & "repro_title" & fieldcvalues & titleString & ", " & pageString & valueefieldeentitye
-                        End If
-                    End If
+                    'Else
+                     '   pageString = specialChars(Cells(i, 9))
+                     '   seqString = specialChars(Cells(i, 9))
+                     '   subsetIndex = fields & "work_subset_index" & fieldcvalues & pageString & valueefielde
+                     '   If shortcoll = "ssp" Then
+                     '       relatedWorkVolPageNo = entitye
+                     '       reproTitle = entitys & "repro_title" & entitycfieldst & "repro_title" & fieldcvalues & "Case " & pageString & ", " & "Page " & seqString & valueefieldeentitye
+                     '   Else
+                     '       relatedWorkVolPageNo = fields & "work_source_page_no" & fieldcvalues & pageString & valueefieldeentitye
+                     '       reproTitle = entitys & "repro_title" & entitycfieldst & "repro_title" & fieldcvalues & titleString & ", " & pageString & valueefieldeentitye
+                     '   End If
+                    'End If
 
                     reproRecordId = entitys & "repro_record" & entitycfieldst & "repro_record_id" & fieldcvalues & workString & "c.tif" & valueefielde
                     reproLinkId = fields & "repro_link_id" & fieldcvalues & workString & "c" & valueefielde
@@ -255,212 +213,43 @@ Sub CreateXML()
                     Subset = entitys & "subset" & entitycfieldst & "work_subset" & fieldcvalues & titleString & valueefielde
                     relatedWorkTitle = entitys & "related_work" & entitycfieldst & "work_source" & fieldcvalues & titleString & valueefielde
 
-                    If Cells(i, 12) = "" Then
+                    If Cells(i, 4) = "" Then
                         MsgBox "major problem- no Shelfmark!" & coll & " " & Cells(i, 8) & Cells(i, 9)
                         shelfmark = ""
                     Else
-                        shelfmark = entitys & "id_number" & entitycfieldst & "work_shelfmark" & fieldcvalues & specialChars(Cells(i, 12)) & valueefielde
+                        shelfmark = entitys & "id_number" & entitycfieldst & "work_shelfmark" & fieldcvalues & specialChars(Cells(i, 4)) & valueefielde
                     End If
 
-                    If Cells(i, 18) = "" Then
+                    If Cells(i, 9) = "" Then
                         sequence = entitye
                     Else
-                        sequence = fields & "sequence" & fieldcvalues & Cells(i, 18) & valueefieldeentitye
+                        sequence = fields & "sequence_no" & fieldcvalues & Cells(i, 9) & valueefieldeentitye
                     End If
 
-                    If Cells(i, 26) = "" Then
+                    'If Cells(i, 26) = "" Then
                         catalogueNumber = entitye
-                    Else
-                        catalogueNumber = fields & "work_catalogue_number" & fieldcvalues & specialChars(Cells(i, 26)) & valueefieldeentitye
-                    End If
+                    'Else
+                    '    catalogueNumber = fields & "work_catalogue_number" & fieldcvalues & specialChars(Cells(i, 26)) & valueefieldeentitye
+                   ' End If
 
-                    repository = entitys & "repository" & entitycfieldst & "work_repository" & fieldcvalues & Cells(i, 22) & valueefieldeentitye
-                    reproRepository = entitys & "repro_repository" & entitycfieldst & "repro_repository" & fieldcvalues & Cells(i, 22) & valueefieldeentitye
+                    repository = entitys & "repository" & entitycfieldst & "work_repository" & fieldcvalues & Cells(i, 7) & valueefieldeentitye
+                    reproRepository = entitys & "repro_repository" & entitycfieldst & "repro_repository" & fieldcvalues & Cells(i, 7) & valueefieldeentitye
 
-                    If Cells(i, 24) = "" Then
+                    If Cells(i, 21) = "" Then
                         catalogueEntry = ""
                     Else
-                        catString = Replace(Cells(i, 24), "&", "%26")
+                        catString = Replace(Cells(i, 21), "&", "%26")
                         catalogueEntry = entitys & "navigation" & entitycfieldst & "catalogue_entry" & fieldcvalues & catString & valueefieldeentitye
                     End If
 
-                    If Cells(i, 11) = "Y" Then
-                        reproPublicationStatus = entitys & "repro_publication_status" & entitycfieldst & "repro_publication_status" & fieldcvalues & "Full Public Access" & valueefieldeentitye
-                    Else
-                        reproPublicationStatus = entitys & "repro_publication_status" & entitycfieldst & "repro_publication_status" & fieldcvalues & "No Access" & valueefieldeentitye
-                    End If
-
-                    If Cells(i, 25) = "N/A" Or Cells(i, 25) = "Unknown" Or Cells(i, 25) = "-" Or Cells(i, 25) = "" Then
-                        subjectEvent = ""
-                    Else
-                        subjectEvent = entitys & "subject" & entitycfieldst & "work_subject_event" & fieldcvalues & specialChars(Cells(i, 25)) & valueefieldeentitye
-                    End If
-
-                    If Cells(i, 27) = "N/A" Or Cells(i, 27) = "Unknown" Or Cells(i, 27) = "-" Or Cells(i, 27) = "" Then
+                   ' If Cells(i, 27) = "N/A" Or Cells(i, 27) = "Unknown" Or Cells(i, 27) = "-" Or Cells(i, 27) = "" Then
                         reproNotes = entitye
-                    Else
-                        reproNotes = fields & "repro_notes" & fieldcvalues & specialChars(Cells(i, 27)) & valueefieldeentitye
-                    End If
+                   ' Else
+                    '    reproNotes = fields & "repro_notes" & fieldcvalues & specialChars(Cells(i, 27)) & valueefieldeentitye
+                   ' End If
 
-                    If Cells(i, 21) = "N/A" Or Cells(i, 21) = "Unknown" Or Cells(i, 21) = "-" Or Cells(i, 21) = "" Then
-                        Description = ""
-                    Else
-                        Description = entitys & "description" & entitycfieldst & "work_description" & fieldcvalues & specialChars(Cells(i, 21)) & valueefieldeentitye
-                    End If
 
-                    If Cells(i, 14) = "N/A" Or Cells(i, 14) = "Unknown" Or Cells(i, 14) = "-" Or Cells(i, 14) = "" Then
-                        dateString = ""
-                    Else
-                        dateString = entitys & "dates" & entitycfieldst & "work_display_date" & fieldcvalues & specialChars(Cells(i, 14)) & valueefieldeentitye
-                    End If
-
-                    j = 0
-                    'Process repeating category
-                    Category = Cells(i, 19)
-                    If Category = "" Then
-                        allSubjectCats = ""
-                    Else
-                        If InStr(Category, ";") = 0 Then
-                            If Category = "N/A" Or Category = "Unknown" Or Category = "-" Then
-                                Category = ""
-                                allSubjectCats = ""
-                            Else
-                                allSubjectCats = entitys & "subject" & entitycfieldst & "work_subject_class" & fieldcvalues & specialChars(Category) & valueefieldeentitye
-                            End If
-                        Else
-                            categoryArray() = Split(Category, ";")
-                            For j = LBound(categoryArray()) To UBound(categoryArray())
-                                If categoryArray(j) = "" Then
-                                    allSubjectCats = ""
-                                Else
-                                    subjectCatString = entitys & "subject" & entitycfieldst & "work_subject_class" & fieldcvalues & Trim(specialChars(categoryArray(j))) & valueefieldeentitye
-                                    allSubjectCats = allSubjectCats & subjectCatString
-                                End If
-                            Next j
-                        End If
-                    End If
-
-                    'Process repeating subject persons
-                    k = 0
-                    person = Cells(i, 23)
-                    If person = "" Then
-                        allSubjectPersons = ""
-                    Else
-                        If InStr(person, ";") = 0 Then
-                            If person = "N/A" Or person = "Unknown" Or person = "-" Then
-                                person = ""
-                                allSubjectPersons = ""
-                            Else
-                                allSubjectPersons = entitys & "subject" & entitycfieldst & "work_subject_person" & fieldcvalues & specialChars(person) & valueefieldeentitye
-                            End If
-                        Else
-                            personArray() = Split(person, ";")
-
-                            For k = LBound(personArray()) To UBound(personArray())
-                                If personArray(k) = "" Then
-                                    allSubjectPersons = ""
-                                Else
-                                    subjectPersonString = entitys & "subject" & entitycfieldst & "work_subject_person" & fieldcvalues & Trim(specialChars(personArray(k))) & valueefieldeentitye
-                                    allSubjectPersons = allSubjectPersons & subjectPersonString
-                                End If
-                            Next k
-                        End If
-                    End If
-
-                    'Process repeating subject places
-
-                    r = 0
-                    place = Cells(i, 20)
-                    If place = "" Then
-                        allSubjectPlaces = ""
-                    Else
-                        If InStr(place, ";") = 0 Then
-                            If place = "N/A" Or place = "Unknown" Or place = "-" Then
-                                place = ""
-                                allSubjectPlaces = ""
-                            Else
-                                allSubjectPlaces = entitys & "subject" & entitycfieldst & "work_subject_place" & fieldcvalues & specialChars(place) & valueefieldeentitye
-                            End If
-                        Else
-                            placeArray() = Split(place, ";")
-                            For r = LBound(placeArray()) To UBound(placeArray())
-                                If placeArray(r) = "" Then
-                                    allSubjectPlaces = ""
-                                Else
-                                    subjectPlaceString = entitys & "subject" & entitycfieldst & "work_subject_place" & fieldcvalues & Trim(specialChars(placeArray(r))) & valueefieldeentitye
-                                    allSubjectPlaces = allSubjectPlaces & subjectPlaceString
-                                End If
-                            Next r
-                        End If
-                    End If
-
-                    v = 0
-                    'Process repeating prod places
-                    prodPlace = Cells(i, 15)
-                    If prodPlace = "" Then
-                        allProdPlaces = ""
-                    Else
-                        If InStr(prodPlace, ";") = 0 Then
-                           If prodPlace = "N/A" Or prodPlace = "Unknown" Or prodPlace = "-" Then
-                               prodPlace = ""
-                               allProdPlaces = ""
-                           Else
-                               allProdPlaces = entitys & "production_place" & entitycfieldst & "production_place" & fieldcvalues & specialChars(prodPlace) & valueefieldeentitye
-                           End If
-                        Else
-                            prodPlaceArray() = Split(prodPlace, ";")
-                            For v = LBound(prodPlaceArray()) To UBound(prodPlaceArray())
-                                If prodPlaceArray(v) = "" Then
-                                    allProdPlaces = ""
-                                Else
-                                    prodPlaceString = entitys & "production_place" & entitycfieldst & "production_place" & fieldcvalues & Trim(specialChars(prodPlaceArray(v))) & valueefieldeentitye
-                                    allProdPlaces = allProdPlaces & prodPlaceString
-                                End If
-                            Next v
-                        End If
-                    End If
-
-                    'Generate summary creator in correct format
-                    y = 0
-                    creatorName = Cells(i, 16)
-                    If creatorName = "" Then
-                        allCreators = ""
-                    Else
-                        If InStr(creatorName, ";") = 0 Then
-                            If InStr(creatorName, ",") = 0 Then
-                                summaryCreator = creatorName
-                            Else
-                                creatorNameBits() = Split(creatorName, ",")
-                                summaryCreator = Trim(Trim(creatorNameBits(1)) & " " & Trim(creatorNameBits(0)))
-                            End If
-                            creatorString = entitys & "creator" & entitycfieldst & "work_creator_details" & fieldcvalues & specialChars(creatorName) & valueefielde
-                            creatorNameString = fields & "work_creator_name" & fieldcvalues & specialChars(creatorName) & valueefielde
-                            summaryCreatorString = fields & "summary_creator" & fieldcvalues & specialChars(summaryCreator) & valueefieldeentitye
-                            allCreators = creatorString & creatorNameString & summaryCreatorString
-                        Else
-                            creatorNameArray() = Split(creatorName, ";")
-
-                            For y = LBound(creatorNameArray()) To UBound(creatorNameArray())
-                                If creatorNameArray(y) = "" Then
-                                    allCreators = ""
-                                Else
-                                    creatorString = entitys & "creator" & entitycfieldst & "work_creator_details" & fieldcvalues & Trim(specialChars(creatorNameArray(y))) & valueefielde
-                                    creatorNameString = fields & "work_creator_name" & fieldcvalues & Trim(specialChars(creatorNameArray(y))) & valueefielde
-                                End If
-
-                                If InStr(creatorNameArray(y), ",") = 0 Then
-                                    summaryCreatorString = fields & "summary_creator" & fieldcvalues & Trim(specialChars(creatorNameArray(y))) & valueefieldeentitye
-                                Else
-
-                                    creatorNameBits() = Split(creatorNameArray(y), ",")
-                                    summaryCreator = Trim(Trim(creatorNameBits(1)) & " " & Trim(creatorNameBits(0)))
-                                    summaryCreatorString = fields & "summary_creator" & fieldcvalues & specialChars(summaryCreator) & valueefieldeentitye
-                                End If
-                                creatorBlock = creatorString & creatorNameString & summaryCreatorString
-                                allCreators = allCreators & creatorBlock
-                            Next y
-                        End If
-                    End If
+                    reproPublicationStatus = entitys & "repro_publication_status" & entitycfieldst & "repro_publication_status" & fieldcvalues & "Full Public Access" & valueefieldeentitye
 
                     'Build XML file
                     dataLine1 = workRecordId & licenceString & shelfmark & holdingInstitution & catalogueNumber & Title & Subset & subsetIndex & sequence & allCreators & dateString & Description & allProdPlaces & repository & allSubjectPersons & allSubjectPlaces & subjectEvent & allSubjectCats & relatedWorkTitle & relatedWorkVolPageNo & rightsStatement & catalogueEntry
@@ -480,32 +269,30 @@ Sub CreateXML()
                         fssp.WriteText recordLine
                         fssp.WriteText dataLine & Chr(10)
                         fssp.WriteText recordCloser
-                        ssparray(sspcount) = Cells(i, 8) & " ; " & Cells(i, 11)
+                        ssparray(sspcount) = Cells(i, 8) & " ; Public "
                         sspcount = sspcount + 1
                     End If
 
-                    Cells(i, 40) = "V"
+                    Cells(i, 22) = "V"
 
                 End If
             Else
                 MsgBox "major problem- no Collection!" & " " & coll & " " & Cells(i, 8) & Cells(i, 9)
             End If
          End If
-
-
-         Next
-         'Start after the BOM chars, copy to bin and then copy to csv
-         If sspcount > 0 Then
-            fssp.WriteText "</recordList>"
-            fssp.Position = 3
-            fssp.CopyTo fsspb
-            fssp.Flush
-            fssp.Close
-            fsspb.SaveToFile sspxml, 2
-         Else
-            fssp.Close
-            fsspb.Close
-         End If
+    Next
+    'Start after the BOM chars, copy to bin and then copy to csv
+    If sspcount > 0 Then
+        fssp.WriteText "</recordList>"
+        fssp.Position = 3
+        fssp.CopyTo fsspb
+        fssp.Flush
+        fssp.Close
+        fsspb.SaveToFile sspxml, 2
+    Else
+        fssp.Close
+        fsspb.Close
+    End If
 
         i = 0
 
@@ -522,7 +309,6 @@ Sub CreateXML()
         MsgBox "Ended!"
 
 End Sub
-
 Sub Embed()
 MsgBox "Hello DIU!"
 
@@ -546,35 +332,16 @@ MsgBox "Hello DIU!"
     Print #1, "echo " & Chr(34) & "directory is: " & Chr(34) & "%cd% >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageno & "connection.txt" & Chr(34) & " 2>>&1"
 
     For i = 4 To lRows
-        If Cells(i, 32) = "R" Then
+        If Cells(i, 21) = "R" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
             imageno = Left(Cells(i, 8), 7)
 
-            Select Case Cells(i, 10)
-                Case "UoE-Y"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright The University of Edinburgh. Free use."
-                Case "UoE-N"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright The University of Edinburgh. Not for Public Access."
-                Case "Orphan"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright unknown, orphan work."
-                Case "UoE&A-Y"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has been granted for specific use by the University of Edinburgh."
-                Case "UoE&A-N"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for  use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
-                Case "DataP"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright in the original may be University of Edinburgh or rest elsewhere. Data Protection restrictions."
-                Case "Loan"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Copyright in the original currently rests with the creator, their estate, heirs or assignees. Permission has not been granted for  use by the University of Edinburgh (other than those deemed 'Fair Dealing such as educational, personal and non commercial research - unless otherwise stated)."
-               Case "OC"
-                    copyrightstring = "Digital Image: Copyright The University of Edinburgh. Original: Out of Copyright."
-                Case "LHSA"
-                    copyrightstring = "Copyright and Data Protection Restrictions. Not for Public Access."
-                Case Else
-                    copyrightstring = "No copyright information available."
-            End Select
 
-            titl = "Title: " & Cells(i, 13) & "; Author: " & Cells(i, 16) & "; Page No: " & Cells(i, 17) & "; Shelfmark: " & Cells(i, 12) & "; Date: " & Cells(i, 14)
-            desc = "Collection: " & Cells(i, 22) & "; Persons: " & Cells(i, 23) & "; Event: " & Cells(i, 25) & "; Place: " & Cells(i, 20) & "; Category: " & Cells(i, 19) & "; Description: " & Cells(i, 21)
+            copyrightstring = "Holding Institution: " & Cells(i, 5) & ". Digital Image: Copyright University of Edinburgh Library. Original: Out of Copyright."
+
+
+            titl = "Title: Scottish Court of Session Papers; Sequence No: " & Cells(i, 9) & "; Shelfmark: " & Cells(i, 4)
+            'desc = "Collection: " & Cells(i, 22) & "; Persons: " & Cells(i, 23) & "; Event: " & Cells(i, 25) & "; Place: " & Cells(i, 20) & "; Category: " & Cells(i, 19) & "; Description: " & Cells(i, 21)
             city = "Edinburgh"
             pcde = "EH8 9LJ"
             exAd = "Centre for Research Collections, The University of Edinburgh, George Square"
@@ -591,7 +358,7 @@ MsgBox "Hello DIU!"
             Print #2, "set Iptc.Application2.Headline String " & Chr(34) & imageno & Chr(34)
             Print #2, "set Iptc.Application2.Copyright String " & Chr(34) & copyrightstring & Chr(34)
             Print #2, "set Xmp.dc.creator XmpSeq " & Chr(34) & diu & Chr(34)
-            Print #2, "set Iptc.Application2.Caption String " & Chr(34) & desc & Chr(34)
+            'Print #2, "set Iptc.Application2.Caption String " & Chr(34) & desc & Chr(34)
             Print #2, "set Iptc.Application2.ObjectName String " & Chr(34) & titl & Chr(34)
             Print #2, "set Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrCity XmpText " & Chr(34) & city & Chr(34)
             Print #2, "set Xmp.iptc.CreatorContactInfo/Iptc4xmpCore:CiAdrPcode XmpText " & Chr(34) & pcde & Chr(34)
@@ -605,7 +372,7 @@ MsgBox "Hello DIU!"
             Close #2
             Print #1, "exiv2 -m" & commands & " " & Chr(34) & "T:\diu\Crops\" & folder & "Process\" & imageno & "m.tif" & Chr(34) & " >> " & Chr(34) & "T:\diu\Worksheets\error\" & imageno & ".txt" & Chr(34) & " 2>>&1"
 
-            Cells(i, 32) = "E"
+            Cells(i, 21) = "E"
 
         End If
 
@@ -629,27 +396,24 @@ MsgBox "Hello!"
     lRows = oWorksheet.Rows.Count
 
     execdir = "T:\diu\Worksheets\"
-    dt = Format(CStr(Now), "yyy_mm_dd_hh_mm")
-    copybackcmd = "T:\diu\Worksheets\copyback\" & dt & ".bat"
-    Open copybackcmd For Output Lock Write As #1
-    For i = 5 To lRows
-        If Cells(i, 32) = "E" Then
+    For i = 4 To lRows
+        If Cells(i, 21) = "E" Then
             folder = Left(Cells(i, 8), 4) & "000-" & Left(Cells(i, 8), 4) & "999\"
-            imageNo = Left(Cells(i, 8), 7)
+            imageno = Left(Cells(i, 8), 7)
+            copybackcmd = "T:\diu\Worksheets\copyback\" & imageno & ".bat"
+            Open copybackcmd For Output Lock Write As #1
 
-
-            Print #1, "move T:\diu\Crops\" & folder & "Process\" & imageNo & "m.tif*  T:\diu\Crops\" & folder & "Process\" & imageNo & "c.tif"
+            Print #1, "move T:\diu\Crops\" & folder & "Process\" & imageno & "m.tif*  T:\diu\Crops\" & folder & "Process\" & imageno & "c.tif"
             'Print #1, "copy T:\diu\Crops\" & folder & "Process\" & imageNo & "c.tif*  T:\diu\Crops\" & folder & imageNo & "c.tif"
 
-            Cells(i, 32) = "X"
+            Close #1
+
+            retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
+
+            Cells(i, 21) = "X"
 
         End If
     Next
 
-    Close #1
-
-    shellstring = Chr(34) & copybackcmd & Chr(34)
-    Call Shell("cmd.exe /S /C " & shellstring, vbNormalFocus)
-    'retval1 = Shell(Chr(34) & copybackcmd & Chr(34), vbNormalFocus)
 
 End Sub
