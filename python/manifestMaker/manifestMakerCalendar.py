@@ -82,7 +82,7 @@ while k < distinctlen:
            "label" : label,
            "attribution": "Library and University Collections, The University of Edinburgh",
            "logo" : "https://www.eemec.med.ed.ac.uk/img/logo-white.png",
-           "@id" : "https://test.librarylabs.ed.ac.uk/manifests/calendars/" + yearusing + ".json",
+           "@id" : "https://librarylabs.ed.ac.uk/iiif/manifest/calendars/" + yearusing + ".json",
            "related" : detailpage,
            "sequences" : sequencesarray,
            "@type" : "sc:Manifest",
@@ -93,7 +93,7 @@ while k < distinctlen:
         outfile = open('calendars/'+yearusing + '.json', 'w')
         json.dump(outdata, outfile)
         response.close()  
-    manifestsarray.append({"@id":"https://test.librarylabs.ed.ac.uk/manifests/calendars/" + yearusing + ".json",
+    manifestsarray.append({"@id":"https://librarylabs.ed.ac.uk/iiif/manifest/calendars/" + yearusing + ".json",
                             "label": label,
                             "@type": "sc:Manifest",
                             "@context": context
@@ -107,7 +107,7 @@ roomOutData  ={
  "label": "Meeting Rooms Collection",
  "manifests": manifestsarray,    
  "@type": "sc:Collection",
- "@id": "https://librarylabs.ed.ac.uk/manifest/calendars/CalendarCollection.json"
+ "@id": "https://librarylabs.ed.ac.uk/iiif/manifest/calendars/CalendarCollection.json"
 }  
 
 outfile = open('calendars/CalendarCollection.json', 'w')

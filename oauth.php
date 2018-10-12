@@ -414,15 +414,37 @@ elseif ( $command == "urlgettervernonupdate") {
             $recordId = $item->recordId;
             $mediaId = $item->mediaId;
 
-            $outurl = "http://images.is.ed.ac.uk/luna/servlet/detail/".$collection."~".$recordId."~".$mediaId;
+            $outurl = "https://images.is.ed.ac.uk/luna/servlet/detail/".$collection."~".$recordId."~".$mediaId;
             $iiifurl = str_replace("detail", "iiif",$outurl);
+            $iiifurl = str_replace("https", "http",$iiifurl);
             $iiifurl = $iiifurl."/full/full/0/default.jpg";
+            $stringbit = substr($repro_id, 0,4);
+            $folderfull = $stringbit."000-".$stringbit."999\\";
+            if ($collection_no == '20'){
+                $flavour = 'art';
+            }
+            else{
+                $flavour = 'mimed';
+            }
+            if (substr($repro_id, 7,1) == 'd')
+            {
+                $format = ".jpg";
+                $dir = "Derivatives";
+            }
+            else{
+                $format = ".tif";
+                $dir = "Crops";
+            }
+            $thumbnail_ref = $folderfull.$repro_id.".jpg";
+            $master_image = "\\\\sg.datastore.ed.ac.uk\\sg\\lib\\groups\\lac-store\\".$flavour."\\".$dir."\\".$folderfull.$repro_id.$format;
             echo $repro_id.':'.$outurl."<br>";
             if (!$outurl == null) {
                 fwrite($file_handle_out, "<id>".$system_id."</id>\n");
                 fwrite($file_handle_out, "<im_ref>".$iiifurl."</im_ref>\n");
+                fwrite($file_handle_out, "<thumbnail_ref>".$thumbnail_ref."</thumbnail_ref>\n");
+                fwrite($file_handle_out, "<master_image>".$master_image."</master_image>\n");
                 fwrite($file_handle_out, "<luna_url>".$outurl."</luna_url>\n");
-                fwrite($file_handle_out, "<luna_notes>LUNA URL</luna_notes>\n");
+
             }
         }
         fwrite($file_handle_out, "</record>\n");

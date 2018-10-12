@@ -1,14 +1,15 @@
-#Scott Renton, May 2017
-#Vernon-dSpace Loader prep for Skylight
-#Reads Vernon XML file and processes
+# Scott Renton, May 2017
+# Vernon-dSpace Loader prep for Skylight
+# Reads Vernon XML file and processes
 #    dublin core metadata
 #    IIIF images
 #    IIIF manifests
 #    non-image AVs
 #    contents file
-#For use with classic dspace import
+# For use with classic dspace import
 from variables import *
 import os, shutil, urllib, json, csv
+
 print "Hello, UNIX helpdesk"
 print "OK. Jeez. What collection is it?"
 collection = raw_input()
@@ -19,7 +20,7 @@ if environment == 'live':
     environment = ''
     webenv = ''
 else:
-    webenv = environment + "."    
+    webenv = environment + "."
 print "And have I got to put filtering on that?",
 filtered = raw_input()
 existingfolder = collection + exfold
@@ -34,30 +35,33 @@ for root, dirs, files in os.walk(newfolder):
         os.unlink(os.path.join(root, f))
     for d in dirs:
         shutil.rmtree(os.path.join(root, d))
-csvfile2 = open(mapfile, 'rb')    
+csvfile2 = open(mapfile, 'rb')
 mapping = csv.DictReader(csvfile2, delimiter=':')
 maparray = list(mapping)
 maplen = len(maparray)
 bitstreamdirectory = bitdir
 import xml.etree.ElementTree as ET
+
 tree = ET.parse(collection + xmlin)
 root = tree.getroot()
 from xml.dom import minidom
+
 childno = 0
 imagetotal = 0
 soundvideototal = 0
-manifesttotal= 0
+manifesttotal = 0
 blankaccs = 0
 duplicateaccs = 0
-badimagearray=[]
-badaccnoarray=[]
-dupaccnoarray=[]
-disappearedarray=[]
-#MAIN ITEM LEVEL LOOP
+badimagearray = []
+badaccnoarray = []
+dupaccnoarray = []
+disappearedarray = []
+# MAIN ITEM LEVEL LOOP
 for child in root:
     childno = childno + 1
     import xml.etree.cElementTree as ETOut
-    outroot = ETOut.Element(dcheader) 
+
+    outroot = ETOut.Element(dcheader)
     subfolder = ''
     outfile = ''
     a = 0
@@ -69,95 +73,95 @@ for child in root:
     outdata = []
     existing = ''
     duplicateacc = falsevar
-    #METADATA PROCESSING
+    # METADATA PROCESSING
     for object in child:
         tagid = ''
         notetagid = ''
         htpos = ''
         jpgpos = ''
         iiifurl = ''
-        #BUILD AV ARRAYS
+        # BUILD AV ARRAYS
         if object.tag == 'id':
             systemid = object.text
         if object.tag == 'av':
-            tagid = object.get('row','')
+            tagid = object.get('row', '')
             if 'iiif' in object.text:
                 htpos = object.text.find('http')
-                #object.text =object.text.replace('http','https')
+                # object.text =object.text.replace('http','https')
                 jpgpos = object.text.find('default.jpg')
                 jpgpos = jpgpos + 11
                 iiifurl = object.text[htpos:jpgpos]
-                imagearray.append({ "row": tagid,
-                       "iiifurl" : iiifurl})
+                imagearray.append({"row": tagid,
+                                   "iiifurl": iiifurl})
             else:
-                avarray.append(object.text)    
-            a = a + 1   
+                avarray.append(object.text)
+            a = a + 1
         if object.tag == 'av_notes':
-            notetagid = object.get('row','')
-            avnotesarray.append({ "row": notetagid,
-                      'note': object.text})
-            an = an + 1        
-        #BASIC PROCESSING BASED ON ACCESSION NO    
+            notetagid = object.get('row', '')
+            avnotesarray.append({"row": notetagid,
+                                 'note': object.text})
+            an = an + 1
+            # BASIC PROCESSING BASED ON ACCESSION NO
         if object.tag == "accession_no":
-            #print 'Working on item '+object.text
+            # print 'Working on item '+object.text
             j = 0
             existing = falsevar
             if 'L' in object.text:
                 object.text = object.text[2:]
             if '/' in object.text:
-                object.text = object.text.replace ('/','-')
+                object.text = object.text.replace('/', '-')
             if ',' in object.text:
                 object.text = object.text[:4]
             if '@' in object.text:
-                object.text = object.text[:4]    
-            itemaccno = object.text    
-            f = open(collection +"/" + environment + "mapfile.txt")
+                object.text = object.text[:4]
+            itemaccno = object.text
+            f = open(collection + "/" + environment + "mapfile.txt")
             for line in f.readlines():
                 accno = line.split(' ')[0]
                 if itemaccno == accno:
                     existing = truevar
-                j = j +1
+                j = j + 1
             if existing == truevar:
                 subfolder = existingfolder + itemaccno
             else:
                 subfolder = newfolder + itemaccno
-            if os.path.exists(subfolder):  
+            if os.path.exists(subfolder):
                 duplicateacc = truevar
-                duplicateaccs = duplicateaccs + 1  
+                duplicateaccs = duplicateaccs + 1
                 badaccnoarray.append(systemid)
                 dupaccnoarray.append(itemaccno)
-        #GENERATE METADATA
+        # GENERATE METADATA
         if object.tag != 'av':
-            m = 0 
+            m = 0
             while m < maplen:
-                if maparray[m]['vernon'] == object.tag: 
+                if maparray[m]['vernon'] == object.tag:
                     if 'dc_prod_pri_date' in object.tag:
-                        object.text = object.text[7:]   
-                    mdschema = str(maparray[m]['dc']+"value")
+                        object.text = object.text[7:]
+                    mdschema = str(maparray[m]['dc'] + "value")
                     mdelement = str(maparray[m]['element'])
                     if maparray[m]['qualifier'] == 'noqual':
                         mdqualifier = str('')
                     else:
                         mdqualifier = str(maparray[m]['qualifier'])
-                    dcvalue = ETOut.SubElement(outroot,mdschema)
+                    dcvalue = ETOut.SubElement(outroot, mdschema)
                     dcvalue.set('element', mdelement)
                     dcvalue.set('qualifier', mdqualifier)
                     dcvalue.text = object.text
-                m = m + 1  
-#DON'T PROCEED WITH ITEM IF THERE IS NO ACCESSION NUMBER!  
-    print 'Working on this: '+itemaccno                       
-    if itemaccno == '' or duplicateacc == 'true':     
+                m = m + 1
+                # DON'T PROCEED WITH ITEM IF THERE IS NO ACCESSION NUMBER!
+    print 'Working on this: ' + itemaccno
+    if itemaccno == '' or duplicateacc == 'true':
         print 'NO ACCESSION NUMBER- skipping'
         blankaccs = blankaccs + 1
         badaccnoarray.append(systemid)
-    else:        
+    else:
         os.makedirs(subfolder)
-        os.chmod(subfolder,0o777)
-        outfile = subfolder + "/dublin_core.xml" 
+        os.chmod(subfolder, 0o777)
+        outfile = subfolder + "/dublin_core.xml"
         contentsfile = subfolder + "/contents"
-        cfile = open(contentsfile,"w") 
-      
-        #FILTER AND SORT IIIF IMAGES              
+        cfile = open(contentsfile, "w")
+
+        # FILTER AND SORT IIIF IMAGES
         imagearraylen = len(imagearray)
         avnotearraylen = len(avnotesarray)
         i = 0
@@ -170,64 +174,64 @@ for child in root:
                         noteno = int(avnotesarray[n]['note'])
                     except ValueError, e:
                         print "note not a number"
-                    else:  
+                    else:
                         if imagearray[i]['row'] == avnotesarray[n]['row'] and noteno > 0:
-                            indexedarray.append({ "iiifurl": imagearray[i]['iiifurl'],'note': avnotesarray[n]['note']})
+                            indexedarray.append({"iiifurl": imagearray[i]['iiifurl'], 'note': avnotesarray[n]['note']})
                     n = n + 1
             else:
-                indexedarray.append({ "iiifurl": imagearray[i]['iiifurl'],
-                              'note': '1'})
-            
-            i = i + 1           
+                indexedarray.append({"iiifurl": imagearray[i]['iiifurl'],
+                                     'note': '1'})
+
+            i = i + 1
         sortedavs = []
-        sortedavs = sorted(indexedarray,key=lambda dct: dct['note'])
+        sortedavs = sorted(indexedarray, key=lambda dct: dct['note'])
         sortedlen = len(sortedavs)
         s = 0
         manifestarray = []
         while s < sortedlen:
             aok = 0
             if filtered == '1':
-                f = open(collection +"/okimages.txt")
+                f = open(collection + "/okimages.txt")
                 dealingimage = str(sortedavs[s]['iiifurl'])
                 for okimage in f.readlines():
                     if dealingimage in okimage:
-                        dcvalue = ETOut.SubElement(outroot,'dcvalue')
+                        dcvalue = ETOut.SubElement(outroot, 'dcvalue')
                         dcvalue.set('element', 'identifier')
                         dcvalue.set('qualifier', 'imageUri')
                         dcvalue.text = str(sortedavs[s]['iiifurl'])
                         iiifmanifest = dcvalue.text.replace('http', 'https')
-                        iiifmanifest = iiifmanifest.replace("/iiif/","/iiif/m/")
-                        iiifmanifest = iiifmanifest.replace("full/full/0/default.jpg","manifest")
+                        iiifmanifest = iiifmanifest.replace("/iiif/", "/iiif/m/")
+                        iiifmanifest = iiifmanifest.replace("full/full/0/default.jpg", "manifest")
                         print 'Image passed: ' + iiifmanifest
                         manifestarray.append(iiifmanifest)
                     aok = aok + 1
             else:
-                dcvalue = ETOut.SubElement(outroot,'dcvalue')
+                dcvalue = ETOut.SubElement(outroot, 'dcvalue')
                 dcvalue.set('element', 'identifier')
                 dcvalue.set('qualifier', 'imageUri')
                 dcvalue.text = sortedavs[s]['iiifurl']
-                iiifmanifest = dcvalue.text.replace("iiif","iiif/m")
-                iiifmanifest = iiifmanifest.replace("full/full/0/default.jpg","manifest")
+                iiifmanifest = dcvalue.text.replace("iiif", "iiif/m")
+                iiifmanifest = iiifmanifest.replace("full/full/0/default.jpg", "manifest")
                 manifestarray.append(iiifmanifest)
-            #print 'Processing image ' + sortedavs[s]['iiifurl'] 
-            imagetotal = imagetotal + 1     
+            # print 'Processing image ' + sortedavs[s]['iiifurl']
+            imagetotal = imagetotal + 1
             s = s + 1
-        #CREATE IIIF MANIFEST    
-        manifestcount =len(manifestarray)
+        # CREATE IIIF MANIFEST
+        manifestcount = len(manifestarray)
         im = 0
         canvasesarray = []
         sequencesarray = []
         labelpos = 0
         label = ''
         attribution = ''
-        logo =''
+        logo = ''
         id = ''
         type = ''
         context = ''
-        related =''
+        related = ''
         if manifestcount > 0:
             while im < manifestcount:
-                #print str(manifestarray[im])
+                # print str(manifestarray[im])
                 response = urllib.urlopen(manifestarray[im])
                 try:
                     data = json.loads(response.read())
@@ -238,34 +242,34 @@ for child in root:
                         label = data["label"]
                         attribution = data["attribution"]
                         logo = data["logo"]
-                        id = "http://" + webenv + "collections.ed.ac.uk/manifests/" + itemaccno +".json"
+                        id = "http://" + webenv + "collections.ed.ac.uk/manifests/" + itemaccno + ".json"
                         type = "sc:Manifest"
                         context = data["@context"]
                         related = data["@id"]
                     canvasarray = []
-                    canvasarray =data["sequences"][0]["canvases"][0]
+                    canvasarray = data["sequences"][0]["canvases"][0]
                     canvasesarray.append(canvasarray)
-                im = im + 1    
-            sequencesarray.append({ "@type": "sc:Sequence",
-                               "viewingHint" : "individuals",
-                               "canvases": canvasesarray})
-            outdata = { 
-                   "label" : label,
-                   "attribution": attribution,
-                   "logo" : logo,
-                   "@id" : id,
-                   "related" : related,
-                   "sequences" : sequencesarray,
-                   "@type" : type,
-                   "@context" : context 
-                }
+                im = im + 1
+            sequencesarray.append({"@type": "sc:Sequence",
+                                   "viewingHint": "individuals",
+                                   "canvases": canvasesarray})
+            outdata = {
+                "label": label,
+                "attribution": attribution,
+                "logo": logo,
+                "@id": id,
+                "related": related,
+                "sequences": sequencesarray,
+                "@type": type,
+                "@context": context
+            }
             manifestloc = subfolder + '/manifest.json'
             with open(manifestloc, 'w') as jsonfile:
-                    json.dump(outdata, jsonfile)      
-            cfile.write('manifest.json' + "\n")        
-            #print 'Processed manifest ' + manifestfolder + itemaccno + '.json'
-            manifesttotal = manifesttotal + 1     
-        #PROCESS NON-IMAGE AVS
+                json.dump(outdata, jsonfile)
+            cfile.write('manifest.json' + "\n")
+            # print 'Processed manifest ' + manifestfolder + itemaccno + '.json'
+            manifesttotal = manifesttotal + 1
+            # PROCESS NON-IMAGE AVS
         avlen = len(avarray)
         ani = 0
         while ani < avlen:
@@ -280,15 +284,15 @@ for child in root:
                             cfile.write(_file + "\n")
                             print "Processed sound or video " + _file
                             soundvideototal = soundvideototal + 1
-            ani = ani + 1                               
+            ani = ani + 1
         cfile.close()
         rough_string = ETOut.tostring(outroot, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         pretty_string = reparsed.toprettyxml(indent="\t")
-        file = open(outfile,"w") 
+        file = open(outfile, "w")
         file.write(pretty_string)
-        file.close()  
-f = open(collection +"/" + environment + "mapfile.txt")
+        file.close()
+f = open(collection + "/" + environment + "mapfile.txt")
 for accno in f.readlines():
     accno = accno.split(' ')
     found = 0
@@ -296,13 +300,13 @@ for accno in f.readlines():
         found = os.path.isdir(existingfolder + accno[0])
     except ValueError, e:
         print "failure"
-    #for i,j,y in os.walk(existingfolder):
+    # for i,j,y in os.walk(existingfolder):
     #    filename = i[21:]
     #    if accno[0] == filename:
     #        found = 'y'
     if found == 0:
         disappearedarray.append(accno[0])
-        
+
 f.close()
 print 'Processed ' + str(childno) + ' items.'
 print 'Processed ' + str(imagetotal) + ' IIIF images.'
@@ -311,11 +315,11 @@ print 'Processed ' + str(manifesttotal) + ' IIIF manifests.'
 print 'Skipped ' + str(blankaccs) + ' records with no accession number.'
 print 'Skipped ' + str(duplicateaccs) + ' duplicate accession numbers.'
 for badacc in badaccnoarray:
-    print "System ID to check: " +badacc
+    print "System ID to check: " + badacc
 for dupacc in dupaccnoarray:
     print "Dup image: " + dupacc
 for badimage in badimagearray:
-    print "Image dead: " + badimage 
+    print "Image dead: " + badimage
 for disappeared in disappearedarray:
-    print "Record vanished:" + disappeared    
-print 'Finished.' 
+    print "Record vanished:" + disappeared
+print 'Finished.'

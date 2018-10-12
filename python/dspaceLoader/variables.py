@@ -1,6 +1,5 @@
 exfold = '/dspaceExisting/'
 nfold = '/dspaceNew/'
-manfold = '/manifests/'
 mapfile = 'mapping.txt'
 bitdir = 'bitstreamdirectory'
 xmlin = '/dspace.xml'

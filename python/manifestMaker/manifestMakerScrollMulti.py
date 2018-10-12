@@ -9,6 +9,7 @@ for urlstring in urlarray:
     print urlstring
 
 response = urllib.urlopen(urlarray[0])
+print response
 data = json.loads(response.read())
 pos = data["manifests"][0]["label"].find(":")
 label = "Mahabharata Scroll"
@@ -29,7 +30,7 @@ for urlstring in urlarray:
     udata = json.loads(uresponse.read())
     print urlstring
     for item in udata["manifests"]:
-        labelseq = item["label"][36:].zfill(3)
+        labelseq = item["label"][42:].zfill(3)
         print str(labelseq)+item['@id']
         manifestseqarray.append({ "seq": labelseq,
                            "@id" : item["@id"]})
