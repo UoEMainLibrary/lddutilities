@@ -8,21 +8,38 @@
 #    contents file
 # For use with classic dspace import
 from variables import *
-import os, shutil, urllib, json, csv
+import os, shutil, urllib, json, csv, getopt, argparse
 
-print "Hello, UNIX helpdesk"
-print "OK. Jeez. What collection is it?"
-collection = raw_input()
-print "Right. Sigh."
-print "And is that test or live?"
-environment = raw_input()
+collection = ''
+environment = ''
+filtered = ''
+
+parser = argparse.ArgumentParser()
+parser.add_argument('-c', '--collection',
+            action="store", dest="collection",
+            help="collection loading", default="spam")
+parser.add_argument('-e', '--environment',
+            action="store", dest="environment",
+            help="environment- test or live", default="spam")
+parser.add_argument('-f', '--filtered',
+            action="store", dest="filtered",
+            help="filtering of images", default="spam")
+args = parser.parse_args()
+print(args)
+collection= str(args.collection)
+environment =str(args.environment)
+filtered =str(args.filtered)
+
+print ('collection is '+ collection)
+print ('environment is ' + environment)
+print ('filtering is ' + filtered)
+
 if environment == 'live':
     environment = ''
     webenv = ''
 else:
     webenv = environment + "."
-print "And have I got to put filtering on that?",
-filtered = raw_input()
+
 existingfolder = collection + exfold
 for root, dirs, files in os.walk(existingfolder):
     for f in files:
@@ -149,9 +166,9 @@ for child in root:
                     dcvalue.text = object.text
                 m = m + 1
                 # DON'T PROCEED WITH ITEM IF THERE IS NO ACCESSION NUMBER!
-    print 'Working on this: ' + itemaccno
+    print('Working on this: ' + itemaccno)
     if itemaccno == '' or duplicateacc == 'true':
-        print 'NO ACCESSION NUMBER- skipping'
+        print('NO ACCESSION NUMBER- skipping')
         blankaccs = blankaccs + 1
         badaccnoarray.append(systemid)
     else:
@@ -172,8 +189,8 @@ for child in root:
                 while n < avnotearraylen:
                     try:
                         noteno = int(avnotesarray[n]['note'])
-                    except ValueError, e:
-                        print "note not a number"
+                    except ValueError:
+                        print("note not a number")
                     else:
                         if imagearray[i]['row'] == avnotesarray[n]['row'] and noteno > 0:
                             indexedarray.append({"iiifurl": imagearray[i]['iiifurl'], 'note': avnotesarray[n]['note']})
@@ -202,7 +219,7 @@ for child in root:
                         iiifmanifest = dcvalue.text.replace('http', 'https')
                         iiifmanifest = iiifmanifest.replace("/iiif/", "/iiif/m/")
                         iiifmanifest = iiifmanifest.replace("full/full/0/default.jpg", "manifest")
-                        print 'Image passed: ' + iiifmanifest
+                        print('Image passed: ' + iiifmanifest)
                         manifestarray.append(iiifmanifest)
                     aok = aok + 1
             else:
@@ -235,7 +252,7 @@ for child in root:
                 response = urllib.urlopen(manifestarray[im])
                 try:
                     data = json.loads(response.read())
-                except ValueError, e:
+                except ValueError:
                     badimagearray.append(manifestarray[im])
                 else:
                     if im == 0:
@@ -282,15 +299,16 @@ for child in root:
                         if _file in avarray[ani]:
                             shutil.copy(os.path.abspath(root + '/' + _file), subfolder)
                             cfile.write(_file + "\n")
-                            print "Processed sound or video " + _file
+                            print("Processed sound or video " + _file)
                             soundvideototal = soundvideototal + 1
             ani = ani + 1
         cfile.close()
         rough_string = ETOut.tostring(outroot, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         pretty_string = reparsed.toprettyxml(indent="\t")
-        file = open(outfile, "w")
-        file.write(pretty_string)
+        import codecs
+        with codecs.open(outfile, "w", encoding='utf-8') as file:
+            file.write(pretty_string)
         file.close()
 f = open(collection + "/" + environment + "mapfile.txt")
 for accno in f.readlines():
@@ -298,8 +316,8 @@ for accno in f.readlines():
     found = 0
     try:
         found = os.path.isdir(existingfolder + accno[0])
-    except ValueError, e:
-        print "failure"
+    except ValueError:
+        print("failure")
     # for i,j,y in os.walk(existingfolder):
     #    filename = i[21:]
     #    if accno[0] == filename:
@@ -308,18 +326,18 @@ for accno in f.readlines():
         disappearedarray.append(accno[0])
 
 f.close()
-print 'Processed ' + str(childno) + ' items.'
-print 'Processed ' + str(imagetotal) + ' IIIF images.'
-print 'Processed ' + str(soundvideototal) + ' non-image media.'
-print 'Processed ' + str(manifesttotal) + ' IIIF manifests.'
-print 'Skipped ' + str(blankaccs) + ' records with no accession number.'
-print 'Skipped ' + str(duplicateaccs) + ' duplicate accession numbers.'
+print('Processed ' + str(childno) + ' items.')
+print('Processed ' + str(imagetotal) + ' IIIF images.')
+print('Processed ' + str(soundvideototal) + ' non-image media.')
+print('Processed ' + str(manifesttotal) + ' IIIF manifests.')
+print('Skipped ' + str(blankaccs) + ' records with no accession number.')
+print('Skipped ' + str(duplicateaccs) + ' duplicate accession numbers.')
 for badacc in badaccnoarray:
-    print "System ID to check: " + badacc
+    print("System ID to check: " + badacc)
 for dupacc in dupaccnoarray:
-    print "Dup image: " + dupacc
+    print("Dup image: " + dupacc)
 for badimage in badimagearray:
-    print "Image dead: " + badimage
+    print("Image dead: " + badimage)
 for disappeared in disappearedarray:
-    print "Record vanished:" + disappeared
-print 'Finished.'
+    print("Record vanished:" + disappeared)
+print('Finished.')
