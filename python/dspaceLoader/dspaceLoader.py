@@ -59,6 +59,8 @@ maplen = len(maparray)
 bitstreamdirectory = bitdir
 import xml.etree.ElementTree as ET
 
+fm = open(collection + "/" + environment + "mapfile.txt", "w")
+
 tree = ET.parse(collection + xmlin)
 root = tree.getroot()
 from xml.dom import minidom
@@ -90,6 +92,7 @@ for child in root:
     outdata = []
     existing = ''
     duplicateacc = falsevar
+
     # METADATA PROCESSING
     for object in child:
         tagid = ''
@@ -132,11 +135,12 @@ for child in root:
             if '@' in object.text:
                 object.text = object.text[:4]
             itemaccno = object.text
-            f = open(collection + "/" + environment + "mapfile.txt")
+            f = open(collection + "/" + environment + "mapfile-prev.txt")
             for line in f.readlines():
                 accno = line.split(' ')[0]
                 if itemaccno == accno:
                     existing = truevar
+                    fm.write(line)
                 j = j + 1
             if existing == truevar:
                 subfolder = existingfolder + itemaccno
@@ -310,7 +314,7 @@ for child in root:
         with codecs.open(outfile, "w", encoding='utf-8') as file:
             file.write(pretty_string)
         file.close()
-f = open(collection + "/" + environment + "mapfile.txt")
+f = open(collection + "/" + environment + "mapfile-prev.txt")
 for accno in f.readlines():
     accno = accno.split(' ')
     found = 0
@@ -338,6 +342,10 @@ for dupacc in dupaccnoarray:
     print("Dup image: " + dupacc)
 for badimage in badimagearray:
     print("Image dead: " + badimage)
+vl = open(collection + "/" + environment + "vanished.log", "w")
 for disappeared in disappearedarray:
     print("Record vanished:" + disappeared)
+    vl.write(disappeared)
+vl.close()
+fm.close()
 print('Finished.')

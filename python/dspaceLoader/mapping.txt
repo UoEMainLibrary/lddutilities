@@ -14,8 +14,8 @@ user_sym_6:dc:contributor:authorza:
 credit_line:dc:rights:noqual:
 collection:dc:relation:ispartofpath:
 prod_pri_date:dc:coverage:temporal:
-dc_prod_pri_date_earliest_being:dc:coverage:temporalearly:
-dc_prod_pri_date_latest_being:dc:coverage:temporallate:
+prod_pri_earliest:dc:coverage:temporalearly:
+prod_pri_latest:dc:coverage:temporallate:
 brief_desc:dc:description:noqual:
 prod_pri_period:dc:coverage:temporalperiod:
 cataloguer:dc:description:provenance:

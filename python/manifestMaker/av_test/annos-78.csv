@@ -1,0 +1,43 @@
+﻿type,format,value,width,height,duration,target,anno_id,id
+Image,image/jpeg,0,0,0,120,"#xywh=0,0,1200,1200&t=0,194",1,https://librarylabs.ed.ac.uk/iiif/media/arg78.png
+Audio,audio/mp3,,,,195,"#xywh=400,100,200,100&t=0,162.5",2,https://librarylabs.ed.ac.uk/iiif/media/oleola.mp3
+Image,image/jpeg,200,800,5,120,"#xywh=1000,100,200,800&t=3,194",1,https://librarylabs.ed.ac.uk/iiif/media/scale-black.jpg
+Image,image/jpeg,1000,100,0,180,"#xywh=20,870,1155,150&t=0,194",1,https://librarylabs.ed.ac.uk/iiif/media/black-bar.jpg
+Image,image/jpeg,75,75,3,52,"#xywh=970,535,75,75&t=3,55",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+TextualBody,text/plain,Scotland famously never get past the first round in a World Cup. Just a win by three goals and we're there!,,,2,"#xywh=100,900,1000,100&t=0,5",3,
+TextualBody,text/plain,Only problem... we're playing the mighty Netherlands! Will we regret our failure to get the wins against Peru and Iran? Over to Mendoza we go...,,,2,"#xywh=100,900,1000,100&t=5,10",3,
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=10,50",1,https://librarylabs.ed.ac.uk/iiif/media/sco00ned.jpg
+Video,video/mp4,900,500,10,30,"#xywh=79,100,900,500&t=10,51",1,https://librarylabs.ed.ac.uk/iiif/media/holland10scotland.mp4
+TextualBody,text/plain,First blood to the Netherlands (never a penalty!). We need four now.,,,2,"#xywh=100,900,1000,100&t=49,52",3,
+TextualBody,text/plain,Fun fact! That was the 1000th goal in the history of the World Cup.,,,2,"#xywh=100,900,1000,100&t=52,57",3,
+Image,image/jpeg,75,75,30,50,"#xywh=272,100,500,500&t=51,57",1,https://librarylabs.ed.ac.uk/iiif/media/1000.jpg
+Image,image/jpeg,75,75,30,50,"#xywh=970,650,75,75&t=55,83",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+Video,video/mp4,900,500,10,50,"#xywh=79,100,900,500&t=57,79",1,https://librarylabs.ed.ac.uk/iiif/media/holland11scotland.mp4
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=50,74",1,https://librarylabs.ed.ac.uk/iiif/media/sco01ned.jpg
+Image,image/jpeg,75,75,3,52,"#xywh=970,535,75,75&t=83,110",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+TextualBody,text/plain,Bit more like it. Kenny Dalglish levels just before half time.,,,2,"#xywh=100,900,1000,100&t=74,79",3,
+TextualBody,text/plain,Dalglish went on to become Scotland's record cap-holder and joint-record goalscorer.,,,2,"#xywh=100,900,1000,100&t=79,84",3,
+Image,image/jpeg,75,75,30,50,"#xywh=400,100,278,400&t=79,84",1,https://librarylabs.ed.ac.uk/iiif/media/dalglish.jpg
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=74,105",1,https://librarylabs.ed.ac.uk/iiif/media/sco11ned.jpg
+Video,video/mp4,900,500,10,50,"#xywh=79,100,900,500&t=84,106",1,https://librarylabs.ed.ac.uk/iiif/media/holland12scotland.mp4
+Image,image/jpeg,75,75,3,52,"#xywh=970,420,75,75&t=110,150",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+TextualBody,text/plain,"Thanks to our own dubious penalty, we're in front! By one! Archie Gemmill does the business.",,,2,"#xywh=100,900,1000,100&t=105,108",3,
+TextualBody,text/plain,"That penalty was gained by the brilliant Graeme Souness, whose omission for the first two games is often cited as a reason for those bad results. He didn't even get a sticker.",,,2,"#xywh=100,900,1000,100&t=108,113",3,
+Image,image/jpeg,75,75,30,50,"#xywh=365,100,340,400&t=106,113",1,https://librarylabs.ed.ac.uk/iiif/media/souness.jpg
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=105,132",1,https://librarylabs.ed.ac.uk/iiif/media/sco21ned.jpg
+Video,video/mp4,900,500,10,50,"#xywh=79,100,900,500&t=113,150",1,https://librarylabs.ed.ac.uk/iiif/media/holland13scotland.mp4
+Image,image/jpeg,75,75,3,52,"#xywh=970,305,75,75&t=150,165",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+TextualBody,text/plain,"Archie Gemmill has just scored the greatest goal in Scotland's history. Even though I was only one at the time, I'm SURE I remember it. Just one away. Come on Scotland.",,,2,"#xywh=100,900,1000,100&t=132,150",3,
+TextualBody,text/plain,"It went on to take on a new place in Scottish culture in an infamous scene in the Trainspotting movie.",,,2,"#xywh=100,900,1000,100&t=150,155",3,
+Image,image/jpeg,75,75,30,50,"#xywh=137,100,800,500&t=150,155",1,https://librarylabs.ed.ac.uk/iiif/media/trainspottingarchie.jpg
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=132,164",1,https://librarylabs.ed.ac.uk/iiif/media/sco31ned.jpg
+Video,video/mp4,900,500,10,50,"#xywh=79,100,900,500&t=155,175",1,https://librarylabs.ed.ac.uk/iiif/media/holland23scotland.mp4
+Image,image/jpeg,75,75,3,52,"#xywh=970,420,75,75&t=165,194",1,https://librarylabs.ed.ac.uk/iiif/media/Scotland_badge.png
+TextualBody,text/plain,That was NOT in the script. Thanks Johnny Rep. Two needed now.,,,2,"#xywh=100,900,1000,100&t=164,175",3,
+Image,image/jpeg,600,200,10,30,"#xywh=220,650,620,100&t=164,194",1,https://librarylabs.ed.ac.uk/iiif/media/sco32ned.jpg
+TextualBody,text/plain,Full time. No time for the unlikely comeback- sadly.,,,2,"#xywh=100,900,1000,100&t=175,184",3,
+TextualBody,text/plain,"This typifies the glorious failure the Scotland fan is destined to endure- so close and yet so very, very far...",,,2,"#xywh=100,900,1000,100&t=184,194",3,
+Image,image/jpeg,900,500,10,50,"#xywh=175,100,700,500&t=175,184",1,https://librarylabs.ed.ac.uk/iiif/media/fulltime.png
+Image,image/jpeg,900,500,10,50,"#xywh=215,100,634,382&t=184,194",1,https://librarylabs.ed.ac.uk/iiif/media/cryingfan.jpg
+Audio,audio/mp3,,,,195,"#xywh=400,100,200,100&t=162.5,164",2,https://librarylabs.ed.ac.uk/iiif/media/stop.mp3
+Audio,audio/mp3,,,,195,"#xywh=400,100,200,100&t=175,194",2,https://librarylabs.ed.ac.uk/iiif/media/argentina.mp3
