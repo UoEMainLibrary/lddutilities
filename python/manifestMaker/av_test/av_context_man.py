@@ -7,6 +7,33 @@
 #    non-image AVs
 #    contents file
 # For use with classic dspace import
+
+import argparse
+
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-c', '--collection',
+            action="store", dest="collection",
+            help="collection loading", default="mimed")
+
+args = parser.parse_args()
+
+print(args)
+collection= str(args.collection)
+
+print ('collection is '+ collection)
+
+if collection == 'art':
+    background_img = 'UoEart~1~1~74613~168756'
+    end_notes = ' in the Art Collection '
+elif collection == 'mimed':
+    background_img = 'UoEgal~4~4~168664~177233'
+    end_notes = ' at St Cecilias Hall '
+else:
+    background_img = 'UoEgal~4~4~168664~177233'
+    end_notes = ' at St Cecilias Hall '
+
+
 def append_item(body_array, canvas, ts, tf, annocount,x,y):
     '''
     Add body into array
@@ -36,12 +63,12 @@ def control():
     from mutagen.mp4 import MP4
     import math
 
-    existingfolder = "manifests"
+    existingfolder = collection + "/manifests"
     for root, dirs, files in os.walk(existingfolder):
         for f in files:
             os.unlink(os.path.join(root, f))
 
-    xmlin = 'dspace.xml'
+    xmlin = collection + '/dspace.xml'
     tree = ET.parse(xmlin)
     root = tree.getroot()
     from xml.dom import minidom
@@ -150,15 +177,11 @@ def control():
                 if 'mp3' in avarray[s]:
                     sample_fail = 0
                     print("WORKING WITH" + str(avarray[s]))
-                    file = avarray[s].split("; ")
-                    if ".mp3" in file[0]:
-                        usefile = "media/" + str(file[0])
-                    else:
-                        if "-" in file[1]:
-                            usefile = "media/" + str(file[1])[16:]
-                            usefile = usefile.strip(" (Digitized Sound)")
-                        else:
-                            usefile = "media/" + str(file[1])
+
+                    mp3pos = avarray[s].find(".mp3")
+                    usefile = "media/" + avarray[s][mp3pos -8: mp3pos + 4]
+
+                    print(usefile)
                     try:
                         audio = MP3(usefile)
                         sduration=audio.info.length
@@ -178,247 +201,259 @@ def control():
                 if 'mp4' in avarray[s]:
                     sample_fail =0
                     print("WORKING WITH" + str(avarray[s]))
-                    file = avarray[s].split("; ")
-                    if ".mp4" in file[0]:
-                        usefile = "media/" + file[0]
-                    else:
-                        usefile = "media/" + file[1]
+
+                    mp4pos = avarray[s].find(".mp4")
+                    usefile = "media/" + avarray[s][mp4pos -8: mp4pos + 4]
+
+                    print(usefile)
                     try:
                         video = MP4(usefile)
                         vduration=video.info.length
                     except:
                         sample_fail = 1
-
+                    print("SAMPLE_FAIL " + str(sample_fail))
                     if sample_fail == 0:
                         video_file = usefile
                     videocount +=1
                 s += 1
+            av_total = audiocount + videocount
+            if av_total > 0:
+                item_array = []
 
-            item_array = []
+                image_no = 0
 
-            image_no = 0
+                annocount = 0
 
-            annocount = 0
-
-            duration =sduration + vduration
-            duration_rounded = math.ceil(duration)
-
-            body_array = ({
-                "id":"https://images.is.ed.ac.uk/luna/servlet/iiif/UoEgal~4~4~168664~177233/full/full/0/default.jpg",
-                "type":"Image",
-                "format": "image/jpeg",
-                "width": 1600,
-                "height":1000
-            })
-
-            item = append_item(body_array, canvas, 0, duration_rounded, annocount,0,0)
-            item_array.append(item)
-
-            annocount+=1
-
-            if audio_file:
-                body_array = ({
-                    "id":"https://librarylabs.ed.ac.uk/iiif/" +  audio_file,
-                    "type":"Audio",
-                    "format": "audio/mp3",
-                    "width":200,
-                    "height": 200,
-                    "duration": sduration
-                    })
-
-                item = append_item(body_array, canvas, 0, sduration, annocount,100,100)
-                item_array.append(item)
-
-            annocount+=1
-
-            if video_file:
-                body_array_w = ({
-                        "id":"https://librarylabs.ed.ac.uk/iiif/media/white.jpg",
-                        "type":"Image",
-                        "format": "image/jpeg",
-                        "width":710,
-                        "height":410,
-                        "duration": vduration
-                    })
-
-                item = append_item(body_array_w, canvas, sduration, sduration + vduration,  annocount,20,20)
-                item_array.append(item)
+                duration =sduration + vduration
+                duration_rounded = math.ceil(duration)
 
                 body_array = ({
-                    "id":"https://librarylabs.ed.ac.uk/iiif/" + usefile,
-                    "type":"Video",
-                    "format": "video/mp4" ,
-                    "width":700,
-                    "height":400,
-                    "duration": vduration
-                 })
+                    "id":"https://images.is.ed.ac.uk/luna/servlet/iiif/"+background_img+"/full/full/0/default.jpg",
+                    "type":"Image",
+                    "format": "image/jpeg",
+                    "width": 1600,
+                    "height":1000
+                })
 
-                item = append_item(body_array, canvas, sduration, sduration + vduration, annocount,25,25)
+                item = append_item(body_array, canvas, 0, duration_rounded, annocount,0,0)
                 item_array.append(item)
 
+                annocount+=1
 
-            s = 0
-            imagecount = 0
+                if audio_file:
+                    body_array = ({
+                        "id":"https://librarylabs.ed.ac.uk/iiif/" +  audio_file,
+                        "type":"Audio",
+                        "format": "audio/mp3",
+                        "width":200,
+                        "height": 200,
+                        "duration": sduration
+                        })
 
-            while s < avlen:
-                if 'iiif' in avarray[s]:
-                    imagecount  += 1
-                s+=1
-            if imagecount > 1:
-                target_time = round(duration/imagecount,2)
-                target_finish = 0
-            else:
-                target_time = duration
-                target_finish = 0
+                    item = append_item(body_array, canvas, 0, sduration, annocount,100,100)
+                    item_array.append(item)
 
-            s = 0
-            annocount+=1
-            max_height = 410
-            while s < avlen:
-                if 'iiif' in avarray[s]:
-                    if image_no == 0:
-                       image_target_finish = 0
-
-                    file = avarray[s].split("; ")
-                    filename = file[1].split(" (")
-                    image_raw = get(str(filename[0]))
-                    image = Image.open(BytesIO(image_raw.content))
-                    width, height = image.size
-                    if width > height:
-                        width_new = 700
-                        divisor = width/700
-                        height_new = height/divisor
-                        x_pos  = 880
-                    else:
-                        height_new = 700
-                        divisor = height/700
-                        width_new = width/divisor
-                        x_pos = (1600 - width_new) - 20
-
-                    if height_new > max_height:
-                        max_height = height_new
-
+                annocount+=1
+                print(vduration)
+                if video_file:
                     body_array_w = ({
-                        "id":"https://librarylabs.ed.ac.uk/iiif/media/white.jpg",
-                        "type":"Image",
-                        "format": "image/jpeg",
-                        "width":width_new + 10,
-                        "height":height_new + 10,
-                        "duration": target_time
-                    })
+                            "id":"https://librarylabs.ed.ac.uk/iiif/media/white.jpg",
+                            "type":"Image",
+                            "format": "image/jpeg",
+                            "width":810,
+                            "height":460,
+                            "duration": vduration
+                        })
 
-                    image_target_start = image_target_finish
-                    image_target_finish = image_target_start + target_time
-                    target_start =  image_target_start
-                    target_finish = image_target_start + target_time
-                    image_no += 1
-                    item = append_item(body_array_w, canvas, target_start, target_finish, annocount,x_pos,20)
+                    item = append_item(body_array_w, canvas, sduration, sduration + vduration,  annocount,20,20)
                     item_array.append(item)
 
-                    body_array_i = ({
-                        "id":filename[0],
-                        "type":"Image",
-                        "format": "image/jpeg",
-                        "width":width_new,
-                        "height":height_new,
-                        "duration": target_time
-                    })
+                    body_array = ({
+                        "id":"https://librarylabs.ed.ac.uk/iiif/" + video_file,
+                        "type":"Video",
+                        "format": "video/mp4" ,
+                        "width":800,
+                        "height":450,
+                        "duration": vduration
+                     })
 
-                    image_no += 1
-                    item = append_item(body_array_i, canvas, target_start, target_finish, annocount,x_pos+5,25)
+                    item = append_item(body_array, canvas, sduration, sduration + vduration, annocount,25,25)
                     item_array.append(item)
-                    annocount+=1
-                s+=1
-
-            body_array = ({
-                "type":"TextualBody",
-                "format": "text/plain",
-                "value": str(itemaccno) + ":" + title + " " + creator + " " + date,
-                "width":1400,
-                "height": 200
-            })
 
 
-            item = append_item(body_array, canvas, 0, duration/2, annocount,100,max_height + 50)
-            item_array.append(item)
+                s = 0
+                imagecount = 0
 
-            annocount+= 1
+                while s < avlen:
+                    if 'iiif' in avarray[s]:
+                        imagecount  += 1
+                    s+=1
+                if imagecount > 1:
+                    target_time = round(duration/imagecount,2)
+                    target_finish = 0
+                else:
+                    target_time = duration
+                    target_finish = 0
 
-            body_array = ({
-                "type":"TextualBody",
-                "format": "text/plain",
-                "value": desc,
-                "width":1400,
-                "height": 200
-            })
+                s = 0
+                annocount+=1
+                max_height = 410
+                while s < avlen:
+                    if 'iiif' in avarray[s]:
+                        if image_no == 0:
+                           image_target_finish = 0
 
-            item = append_item(body_array, canvas, duration/2, duration-3, annocount,100,max_height + 50)
-            item_array.append(item)
+                        try:
+                            file = avarray[s].split("; ")
+                        except Exception:
+                            file = avarray[s]
 
-            annocount+=1
+                        print(file)
+
+                        try:
+                            filename = file[1].split(" (")
+                        except Exception:
+                            filename = file[0].split(" (")
+
+                        print(filename)
+                        image_raw = get(str(filename[0]))
+                        image = Image.open(BytesIO(image_raw.content))
+                        width, height = image.size
+                        if width > height:
+                            width_new = 700
+                            divisor = width/700
+                            height_new = height/divisor
+                            x_pos  = 880
+                        else:
+                            height_new = 700
+                            divisor = height/700
+                            width_new = width/divisor
+                            x_pos = (1600 - width_new) - 20
+
+                        if height_new > max_height:
+                            max_height = height_new
+
+                        body_array_w = ({
+                            "id":"https://librarylabs.ed.ac.uk/iiif/media/white.jpg",
+                            "type":"Image",
+                            "format": "image/jpeg",
+                            "width":width_new + 10,
+                            "height":height_new + 10,
+                            "duration": target_time
+                        })
+
+                        image_target_start = image_target_finish
+                        image_target_finish = image_target_start + target_time
+                        target_start =  image_target_start
+                        target_finish = image_target_start + target_time
+                        image_no += 1
+                        item = append_item(body_array_w, canvas, target_start, target_finish, annocount,x_pos,20)
+                        item_array.append(item)
+
+                        body_array_i = ({
+                            "id":filename[0],
+                            "type":"Image",
+                            "format": "image/jpeg",
+                            "width":width_new,
+                            "height":height_new,
+                            "duration": target_time
+                        })
+
+                        image_no += 1
+                        item = append_item(body_array_i, canvas, target_start, target_finish, annocount,x_pos+5,25)
+                        item_array.append(item)
+                        annocount+=1
+                    s+=1
+
+                body_array = ({
+                    "type":"TextualBody",
+                    "format": "text/plain",
+                    "value": str(itemaccno) + ":" + title + " " + creator + " " + date,
+                    "width":1400,
+                    "height": 200
+                })
 
 
-            body_array = ({
-                "type":"TextualBody",
-                "format": "text/plain",
-                "value": "See item " + str(itemaccno) + " at St Cecilias Hall at The University of Edinburgh",
-                "width":1600,
-                "height": 100
-            })
+                item = append_item(body_array, canvas, 0, duration/2, annocount,100,max_height + 50)
+                item_array.append(item)
 
-            item = append_item(body_array, canvas, duration, duration_rounded, annocount,350,300)
-            item_array.append(item)
+                annocount+= 1
 
-            annocount+=1
+                body_array = ({
+                    "type":"TextualBody",
+                    "format": "text/plain",
+                    "value": desc,
+                    "width":1400,
+                    "height": 200
+                })
 
-            body_array = ({
-                "type":"Image",
-                "format": "image/jpeg",
-                "id": "http://www.hkcci.com.hk/wp-content/uploads/2017/03/UoE_Centred-Logo_white_v1_160215.png",
-                "width":617,
-                "height": 495
-            })
+                item = append_item(body_array, canvas, duration/2, duration-3, annocount,100,max_height + 50)
+                item_array.append(item)
 
-            item = append_item(body_array, canvas, duration-3, duration_rounded, annocount,500,500)
-            item_array.append(item)
+                annocount+=1
 
-            content_array = []
-            content_array.append({
-                "id": "https://tomcrane.github.io/fire/annos/page",
-                "type": "AnnotationPage",
-                "items": item_array
-            })
 
-            canvas_array = []
-            canvas_array.append({
-                "id": canvas,
-                "type": "Canvas",
-                "width": 1600,
-                "height": 1000,
-                "duration": duration_rounded,
-                "content": content_array
-            })
+                body_array = ({
+                    "type":"TextualBody",
+                    "format": "text/plain",
+                    "value": "See item " + str(itemaccno)  + end_notes + " at The University of Edinburgh",
+                    "width":1600,
+                    "height": 100
+                })
 
-            sequence_array = []
-            sequence_array.append({
-                "id" : "https://librarylabs.ed.ac.uk/iiif/manifest/andy_stewart/seq1",
-                "type": "Sequence",
-                "canvases" : canvas_array
-            })
+                item = append_item(body_array, canvas, duration, duration_rounded, annocount,350,300)
+                item_array.append(item)
 
-            out_data  ={
-                "id" : "https://librarylabs.ed.ac.uk/iiif/manifest/" + itemaccno + ".json",
-                #IIIF 3 - no @, no sc:
-                "type": "Manifest",
-                "logo" : "https://images.is.ed.ac.uk/luna/images/LUNAIIIF80.png",
-                "label": "AV Experiment",
-                "description" : "Testing image, audio and video through IIIF Presentation 3 manifest",
-                "sequences": sequence_array,
+                annocount+=1
 
-            }
+                body_array = ({
+                    "type":"Image",
+                    "format": "image/jpeg",
+                    "id": "http://www.hkcci.com.hk/wp-content/uploads/2017/03/UoE_Centred-Logo_white_v1_160215.png",
+                    "width":617,
+                    "height": 495
+                })
 
-            outfile = open('manifests/' + itemaccno + '.json', 'w')
-            json.dump(out_data, outfile)
+                item = append_item(body_array, canvas, duration-3, duration_rounded, annocount,500,500)
+                item_array.append(item)
+
+                content_array = []
+                content_array.append({
+                    "id": "https://tomcrane.github.io/fire/annos/page",
+                    "type": "AnnotationPage",
+                    "items": item_array
+                })
+
+                canvas_array = []
+                canvas_array.append({
+                    "id": canvas,
+                    "type": "Canvas",
+                    "width": 1600,
+                    "height": 1000,
+                    "duration": duration_rounded,
+                    "content": content_array
+                })
+
+                sequence_array = []
+                sequence_array.append({
+                    "id" : "https://librarylabs.ed.ac.uk/iiif/manifest/andy_stewart/seq1",
+                    "type": "Sequence",
+                    "canvases" : canvas_array
+                })
+
+                out_data  ={
+                    "id" : "https://librarylabs.ed.ac.uk/iiif/manifest/" + itemaccno + ".json",
+                    #IIIF 3 - no @, no sc:
+                    "type": "Manifest",
+                    "logo" : "https://images.is.ed.ac.uk/luna/images/LUNAIIIF80.png",
+                    "label": "AV Experiment",
+                    "description" : "Testing image, audio and video through IIIF Presentation 3 manifest",
+                    "sequences": sequence_array,
+
+                }
+
+                outfile = open(collection +'/manifests/' + itemaccno + '.json', 'w')
+                json.dump(out_data, outfile)
 
 control()
 print('Finished.')
